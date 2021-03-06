@@ -1,5 +1,5 @@
 diff --git a/CREDITS b/CREDITS
-index 96935df..f6a1c03 100644
+index 96935df0b6fe..f6a1c0358c5e 100644
 --- a/CREDITS
 +++ b/CREDITS
 @@ -2280,6 +2280,10 @@ S: PO BOX 220, HFX. CENTRAL
@@ -14,7 +14,7 @@ index 96935df..f6a1c03 100644
  E: Kai.Makisara@kolumbus.fi
  D: SCSI Tape Driver
 diff --git a/Documentation/00-INDEX b/Documentation/00-INDEX
-index cd077ca..7bd8c5c 100644
+index cd077ca0e1b8..7bd8c5c058da 100644
 --- a/Documentation/00-INDEX
 +++ b/Documentation/00-INDEX
 @@ -267,6 +267,8 @@ kmemcheck.txt
@@ -28,7 +28,7 @@ index cd077ca..7bd8c5c 100644
  kobject.txt
 diff --git a/Documentation/kml.txt b/Documentation/kml.txt
 new file mode 100644
-index 0000000..dab3958
+index 000000000000..17c04802e433
 --- /dev/null
 +++ b/Documentation/kml.txt
 @@ -0,0 +1,170 @@
@@ -104,7 +104,7 @@ index 0000000..dab3958
 +CPU doesn't switch its stack to a kernel stack. Therefore, the IA-32 CPU
 +cannot push the registers and generate a double fault exception and fail
 +again. Finally, the IA-32 CPU gives up and reset itself. This is the stack
-+starvation problem. 
++starvation problem.
 +
 +To solve the stack starvation problem, we use the IA-32 hardware task mechanism
 +to handle exceptions. By using the mechanism, IA-32 CPU doesn't push the
@@ -203,7 +203,7 @@ index 0000000..dab3958
 +Implementation Notes for AMD64:
 +(Now writing...)
 diff --git a/MAINTAINERS b/MAINTAINERS
-index efbcb50..7e35a3b 100644
+index efbcb50e4969..7e35a3b65c74 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -5560,6 +5560,12 @@ L:	kernel-janitors@vger.kernel.org
@@ -220,7 +220,7 @@ index efbcb50..7e35a3b 100644
  M:	"J. Bruce Fields" <bfields@fieldses.org>
  L:	linux-nfs@vger.kernel.org
 diff --git a/Makefile b/Makefile
-index fbd43bf..e89d832 100644
+index fbd43bfe4445..e89d8329efe7 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,7 +1,7 @@
@@ -233,7 +233,7 @@ index fbd43bf..e89d832 100644
  
  # *DOCUMENTATION*
 diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index cf4c0c9..cb95d5d 100644
+index cf4c0c99aa25..cb95d5df2a3d 100644
 --- a/arch/arm/Kconfig
 +++ b/arch/arm/Kconfig
 @@ -2159,6 +2159,10 @@ endmenu
@@ -248,7 +248,7 @@ index cf4c0c9..cb95d5d 100644
  
  source "fs/Kconfig"
 diff --git a/arch/arm/include/asm/processor.h b/arch/arm/include/asm/processor.h
-index 8a1e8e9..6914ffa 100644
+index 8a1e8e995dae..6914ffab9713 100644
 --- a/arch/arm/include/asm/processor.h
 +++ b/arch/arm/include/asm/processor.h
 @@ -23,6 +23,9 @@
@@ -309,7 +309,7 @@ index 8a1e8e9..6914ffa 100644
  /* Forward declaration, a strange C thing */
  struct task_struct;
 diff --git a/arch/arm/include/asm/ptrace.h b/arch/arm/include/asm/ptrace.h
-index 51622ba..6c40084 100644
+index 51622ba7c4a6..6c400844c594 100644
 --- a/arch/arm/include/asm/ptrace.h
 +++ b/arch/arm/include/asm/ptrace.h
 @@ -17,8 +17,15 @@ struct pt_regs {
@@ -340,7 +340,7 @@ index 51622ba..6c40084 100644
  			return 1;
  	}
 diff --git a/arch/arm/include/asm/thread_info.h b/arch/arm/include/asm/thread_info.h
-index 72812a1..d5fea8a 100644
+index 72812a1f3d1c..d5fea8a83cda 100644
 --- a/arch/arm/include/asm/thread_info.h
 +++ b/arch/arm/include/asm/thread_info.h
 @@ -159,6 +159,9 @@ extern int vfp_restore_user_hwstate(struct user_vfp __user *,
@@ -380,7 +380,7 @@ index 72812a1..d5fea8a 100644
  #endif /* __KERNEL__ */
  #endif /* __ASM_ARM_THREAD_INFO_H */
 diff --git a/arch/arm/kernel/entry-armv.S b/arch/arm/kernel/entry-armv.S
-index 672b219..015e91a 100644
+index 672b21942fff..015e91a22a72 100644
 --- a/arch/arm/kernel/entry-armv.S
 +++ b/arch/arm/kernel/entry-armv.S
 @@ -1103,7 +1103,11 @@ vector_rst:
@@ -432,7 +432,7 @@ index 672b219..015e91a 100644
  	.align	5
  
 diff --git a/arch/arm/lib/uaccess_with_memcpy.c b/arch/arm/lib/uaccess_with_memcpy.c
-index 3e58d71..a399374 100644
+index 3e58d710013c..a3993748a490 100644
 --- a/arch/arm/lib/uaccess_with_memcpy.c
 +++ b/arch/arm/lib/uaccess_with_memcpy.c
 @@ -90,7 +90,11 @@ __copy_to_user_memcpy(void __user *to, const void *from, unsigned long n)
@@ -460,7 +460,7 @@ index 3e58d71..a399374 100644
  		return 0;
  	}
 diff --git a/arch/arm/vfp/vfphw.S b/arch/arm/vfp/vfphw.S
-index f74a8f7..69cdb2f 100644
+index f74a8f7e5f84..69cdb2f83f06 100644
 --- a/arch/arm/vfp/vfphw.S
 +++ b/arch/arm/vfp/vfphw.S
 @@ -84,8 +84,21 @@ ENTRY(vfp_support_entry)
@@ -486,7 +486,7 @@ index f74a8f7..69cdb2f 100644
  	DBGSTR1	"fpexc %08x", r1
  	tst	r1, #FPEXC_EN
 diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
-index 0bce820..53866dc 100644
+index 0bce820428fc..53866dce0fab 100644
 --- a/arch/microblaze/Kconfig
 +++ b/arch/microblaze/Kconfig
 @@ -284,6 +284,10 @@ endmenu
@@ -501,7 +501,7 @@ index 0bce820..53866dc 100644
  
  source "fs/Kconfig"
 diff --git a/arch/microblaze/include/asm/processor.h b/arch/microblaze/include/asm/processor.h
-index 497a988..5a643b7 100644
+index 497a988d79c2..5a643b78eafe 100644
 --- a/arch/microblaze/include/asm/processor.h
 +++ b/arch/microblaze/include/asm/processor.h
 @@ -122,6 +122,11 @@ struct thread_struct {
@@ -517,7 +517,7 @@ index 497a988..5a643b7 100644
  static inline void release_thread(struct task_struct *dead_task)
  {
 diff --git a/arch/microblaze/include/asm/thread_info.h b/arch/microblaze/include/asm/thread_info.h
-index b699fbd..ddc9651 100644
+index b699fbd7de4a..ddc965131d9a 100644
 --- a/arch/microblaze/include/asm/thread_info.h
 +++ b/arch/microblaze/include/asm/thread_info.h
 @@ -122,6 +122,10 @@ static inline struct thread_info *current_thread_info(void)
@@ -543,7 +543,7 @@ index b699fbd..ddc9651 100644
  #define _TIF_WORK_SYSCALL_MASK  (_TIF_SYSCALL_TRACE | _TIF_SINGLESTEP | \
  				 _TIF_SYSCALL_AUDIT | _TIF_SECCOMP)
 diff --git a/arch/microblaze/kernel/process.c b/arch/microblaze/kernel/process.c
-index b2dd3719..c4221be 100644
+index b2dd37196b3b..c4221be76030 100644
 --- a/arch/microblaze/kernel/process.c
 +++ b/arch/microblaze/kernel/process.c
 @@ -149,7 +149,22 @@ void start_thread(struct pt_regs *regs, unsigned long pc, unsigned long usp)
@@ -570,7 +570,7 @@ index b2dd3719..c4221be 100644
  #ifdef CONFIG_MMU
  #include <linux/elfcore.h>
 diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index b7d31ca..5239012 100644
+index b7d31ca55187..5239012f2ba6 100644
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
 @@ -2580,6 +2580,10 @@ config PMC_ATOM
@@ -585,7 +585,7 @@ index b7d31ca..5239012 100644
  
  source "drivers/firmware/Kconfig"
 diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-index 90a5485..5aa31b8 100644
+index 90a54851aedc..5aa31b8576ac 100644
 --- a/arch/x86/include/asm/cpufeature.h
 +++ b/arch/x86/include/asm/cpufeature.h
 @@ -390,6 +390,9 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
@@ -599,7 +599,7 @@ index 90a5485..5aa31b8 100644
  #if __GNUC__ >= 4
  extern void warn_pre_alternatives(void);
 diff --git a/arch/x86/include/asm/desc.h b/arch/x86/include/asm/desc.h
-index a94b82e..4958340 100644
+index a94b82e8f156..495834023a36 100644
 --- a/arch/x86/include/asm/desc.h
 +++ b/arch/x86/include/asm/desc.h
 @@ -98,7 +98,10 @@ static inline int desc_empty(const void *ptr)
@@ -787,7 +787,7 @@ index a94b82e..4958340 100644
  static inline void set_system_trap_gate(unsigned int n, void *addr)
  {
 diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index ca3347a..c041ba5 100644
+index ca3347a9dab5..c041ba5c8c3a 100644
 --- a/arch/x86/include/asm/elf.h
 +++ b/arch/x86/include/asm/elf.h
 @@ -275,7 +275,7 @@ extern int force_personality32;
@@ -882,7 +882,7 @@ index ca3347a..c041ba5 100644
  #define COMPAT_ELF_ET_DYN_BASE	(TASK_UNMAPPED_BASE + 0x1000000)
  
 diff --git a/arch/x86/include/asm/hw_irq.h b/arch/x86/include/asm/hw_irq.h
-index 9662290..01ce1df 100644
+index 9662290e0b20..01ce1df2de04 100644
 --- a/arch/x86/include/asm/hw_irq.h
 +++ b/arch/x86/include/asm/hw_irq.h
 @@ -193,6 +193,37 @@ extern void (*__initconst interrupt[FIRST_SYSTEM_VECTOR
@@ -924,7 +924,7 @@ index 9662290..01ce1df 100644
  
  #endif /* _ASM_X86_HW_IRQ_H */
 diff --git a/arch/x86/include/asm/page_64_types.h b/arch/x86/include/asm/page_64_types.h
-index 4edd53b..7c1301f 100644
+index 4edd53b79a81..e0f83c2ec165 100644
 --- a/arch/x86/include/asm/page_64_types.h
 +++ b/arch/x86/include/asm/page_64_types.h
 @@ -24,7 +24,12 @@
@@ -934,14 +934,14 @@ index 4edd53b..7c1301f 100644
 +#ifndef CONFIG_KERNEL_MODE_LINUX
  #define N_EXCEPTION_STACKS 4  /* hw limit: 7 */
 +#else
-+#define KML_STACK 5 
++#define KML_STACK 5
 +#define N_EXCEPTION_STACKS 5  /* hw limit: 7 */
 +#endif
  
  #define PUD_PAGE_SIZE		(_AC(1, UL) << PUD_SHIFT)
  #define PUD_PAGE_MASK		(~(PUD_PAGE_SIZE-1))
 diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index ec1c935..9ef442d 100644
+index ec1c93588cef..9ef442d5e4f5 100644
 --- a/arch/x86/include/asm/processor.h
 +++ b/arch/x86/include/asm/processor.h
 @@ -146,7 +146,9 @@ struct cpuinfo_x86 {
@@ -1064,7 +1064,7 @@ index ec1c935..9ef442d 100644
  extern void free_init_pages(char *what, unsigned long begin, unsigned long end);
  
 diff --git a/arch/x86/include/asm/segment.h b/arch/x86/include/asm/segment.h
-index db257a5..40680e5 100644
+index db257a58571f..40680e5cb642 100644
 --- a/arch/x86/include/asm/segment.h
 +++ b/arch/x86/include/asm/segment.h
 @@ -74,7 +74,11 @@
@@ -1184,7 +1184,7 @@ index db257a5..40680e5 100644
   * Save a segment register away
   */
 diff --git a/arch/x86/include/asm/sigcontext.h b/arch/x86/include/asm/sigcontext.h
-index 9dfce4e..857e13b 100644
+index 9dfce4e0417d..857e13ba2382 100644
 --- a/arch/x86/include/asm/sigcontext.h
 +++ b/arch/x86/include/asm/sigcontext.h
 @@ -20,7 +20,11 @@ struct sigcontext {
@@ -1200,7 +1200,7 @@ index 9dfce4e..857e13b 100644
  	unsigned long sp_at_signal;
  	unsigned short ss, __ssh;
 diff --git a/arch/x86/include/asm/switch_to.h b/arch/x86/include/asm/switch_to.h
-index 751bf4b..10a8f8e 100644
+index 751bf4b7bf11..10a8f8e7c825 100644
 --- a/arch/x86/include/asm/switch_to.h
 +++ b/arch/x86/include/asm/switch_to.h
 @@ -130,4 +130,18 @@ do {									\
@@ -1223,7 +1223,7 @@ index 751bf4b..10a8f8e 100644
 +
  #endif /* _ASM_X86_SWITCH_TO_H */
 diff --git a/arch/x86/include/asm/thread_info.h b/arch/x86/include/asm/thread_info.h
-index 1d4e4f2..4ce71b8 100644
+index 1d4e4f279a32..4ce71b83f7b2 100644
 --- a/arch/x86/include/asm/thread_info.h
 +++ b/arch/x86/include/asm/thread_info.h
 @@ -86,6 +86,9 @@ struct thread_info {
@@ -1247,7 +1247,7 @@ index 1d4e4f2..4ce71b8 100644
  /* work to do in syscall_trace_enter() */
  #define _TIF_WORK_SYSCALL_ENTRY	\
 diff --git a/arch/x86/include/asm/vdso.h b/arch/x86/include/asm/vdso.h
-index 8021bd2..1e93846 100644
+index 8021bd28c0f1..1e93846ceb7f 100644
 --- a/arch/x86/include/asm/vdso.h
 +++ b/arch/x86/include/asm/vdso.h
 @@ -27,6 +27,9 @@ struct vdso_image {
@@ -1261,7 +1261,7 @@ index 8021bd2..1e93846 100644
  
  #ifdef CONFIG_X86_64
 diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index cdb1b70..51c67fe 100644
+index cdb1b70ddad0..51c67fe04ded 100644
 --- a/arch/x86/kernel/Makefile
 +++ b/arch/x86/kernel/Makefile
 @@ -20,6 +20,20 @@ KASAN_SANITIZE_head$(BITS).o := n
@@ -1294,7 +1294,7 @@ index cdb1b70..51c67fe 100644
  obj-$(CONFIG_VM86)		+= vm86_32.o
  obj-$(CONFIG_EARLY_PRINTK)	+= early_printk.o
 diff --git a/arch/x86/kernel/apic/io_apic.c b/arch/x86/kernel/apic/io_apic.c
-index f4dc246..8b0a033 100644
+index f4dc2462a1ac..8b0a0338e85b 100644
 --- a/arch/x86/kernel/apic/io_apic.c
 +++ b/arch/x86/kernel/apic/io_apic.c
 @@ -1279,6 +1279,10 @@ static void setup_ioapic_irq(unsigned int irq, struct irq_cfg *cfg,
@@ -1366,7 +1366,7 @@ index f4dc246..8b0a033 100644
   * This function currently is only a helper for the i386 smp boot process where
   * we need to reprogram the ioredtbls to cater for the cpus which have come online
 diff --git a/arch/x86/kernel/apm_32.c b/arch/x86/kernel/apm_32.c
-index 927ec92..9a2feee 100644
+index 927ec9235947..9a2feee6a5bc 100644
 --- a/arch/x86/kernel/apm_32.c
 +++ b/arch/x86/kernel/apm_32.c
 @@ -605,9 +605,11 @@ static long __apm_bios_call(void *_call)
@@ -1410,7 +1410,7 @@ index 927ec92..9a2feee 100644
  	return error;
  }
 diff --git a/arch/x86/kernel/asm-offsets_64.c b/arch/x86/kernel/asm-offsets_64.c
-index fdcbb4d..d1e7ab5 100644
+index fdcbb4d27c9f..d1e7ab525978 100644
 --- a/arch/x86/kernel/asm-offsets_64.c
 +++ b/arch/x86/kernel/asm-offsets_64.c
 @@ -81,6 +81,9 @@ int main(void)
@@ -1424,7 +1424,7 @@ index fdcbb4d..d1e7ab5 100644
  
  	DEFINE(__NR_syscall_max, sizeof(syscalls_64) - 1);
 diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 2346c95..418051e 100644
+index 2346c95c6ab1..418051eaa9ec 100644
 --- a/arch/x86/kernel/cpu/common.c
 +++ b/arch/x86/kernel/cpu/common.c
 @@ -278,8 +278,13 @@ __setup("nosmep", setup_disable_smep);
@@ -1488,7 +1488,7 @@ index 2346c95..418051e 100644
  	dbg_restore_debug_regs();
 diff --git a/arch/x86/kernel/direct_call_32.h b/arch/x86/kernel/direct_call_32.h
 new file mode 100644
-index 0000000..92f7932
+index 000000000000..92f7932d0b04
 --- /dev/null
 +++ b/arch/x86/kernel/direct_call_32.h
 @@ -0,0 +1,134 @@
@@ -1627,20 +1627,20 @@ index 0000000..92f7932
 +
 +#endif
 diff --git a/arch/x86/kernel/entry_32.S b/arch/x86/kernel/entry_32.S
-index 31e2d5b..1e6f410 100644
+index 31e2d5bf3e38..df3712e75094 100644
 --- a/arch/x86/kernel/entry_32.S
 +++ b/arch/x86/kernel/entry_32.S
-@@ -69,6 +69,10 @@
+@@ -67,6 +67,10 @@
+ #ifndef CONFIG_AUDITSYSCALL
+ #define sysenter_audit	syscall_trace_entry
  #define sysexit_audit	syscall_exit_work
- #endif
- 
-+#ifdef CONFIG_KERNEL_MODE_LINUX
-+#include <linux/threads.h>
 +#endif
 +
- 	.section .entry.text, "ax"
++#ifdef CONFIG_KERNEL_MODE_LINUX
++#include <linux/threads.h>
+ #endif
  
- /*
+ 	.section .entry.text, "ax"
 @@ -254,6 +258,117 @@
  	POP_GS_EX
  .endm
@@ -1798,7 +1798,7 @@ index 31e2d5b..1e6f410 100644
 +#ifdef CONFIG_KERNEL_MODE_LINUX
 +
 +ENTRY(ret_to_ku)
-+	ASM_STAC	
++	ASM_STAC
 +	cmpl $__KU_CS_EXCEPTION, 4(%esp)
 +	je ret_to_ku_from_exception
 +	jmp ret_to_ku_from_interrupt
@@ -2044,7 +2044,7 @@ index 31e2d5b..1e6f410 100644
 +	pushl %esp
 +	pushl \pre_tss
 +	pushl \cur_tss
-+	pushl \target_address 
++	pushl \target_address
 +	call \func
 +	addl $16, %esp
 +.endm
@@ -2068,7 +2068,7 @@ index 31e2d5b..1e6f410 100644
 + * For example, if a page fault occurs in a stack,
 + * CPU cannot generate a page fault exception because there is no stack
 + * to save the CPU context. We call this problem "stack starvation".
-+ * To solve the stack starvation, we handle double fault with task-handler. 
++ * To solve the stack starvation, we handle double fault with task-handler.
 + *
 + * Initial stack layout (dft_stack_struct)
 + *
@@ -2329,7 +2329,7 @@ index 31e2d5b..1e6f410 100644
  	jmp error_code
  	CFI_ENDPROC
 diff --git a/arch/x86/kernel/entry_64.S b/arch/x86/kernel/entry_64.S
-index f0095a7..e0582c3 100644
+index f0095a76c182..c9b48549fc1c 100644
 --- a/arch/x86/kernel/entry_64.S
 +++ b/arch/x86/kernel/entry_64.S
 @@ -91,6 +91,84 @@ ENDPROC(native_usergs_sysret64)
@@ -2413,7 +2413,7 @@ index f0095a7..e0582c3 100644
 +	.endm
 +
 +#endif
-+	
++
  /*
   * When dynamic function tracer is enabled it will add a breakpoint
   * to all locations that it is about to modify, sync CPUs, update
@@ -2603,7 +2603,7 @@ index f0095a7..e0582c3 100644
  error_sti:
  	TRACE_IRQS_OFF
 diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index c4f8d46..4b9b0f2 100644
+index c4f8d4659070..4b9b0f2e3fb9 100644
 --- a/arch/x86/kernel/head64.c
 +++ b/arch/x86/kernel/head64.c
 @@ -167,7 +167,11 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
@@ -2619,7 +2619,7 @@ index c4f8d46..4b9b0f2 100644
  
  	copy_bootdata(__va(real_mode_data));
 diff --git a/arch/x86/kernel/i8259.c b/arch/x86/kernel/i8259.c
-index e7cc537..976d119 100644
+index e7cc5370cd2f..976d1197dd68 100644
 --- a/arch/x86/kernel/i8259.c
 +++ b/arch/x86/kernel/i8259.c
 @@ -366,6 +366,44 @@ static void init_8259A(int auto_eoi)
@@ -2668,7 +2668,7 @@ index e7cc537..976d119 100644
   * make i8259 a driver so that we can select pic functions at run time. the goal
   * is to make x86 binary compatible among pc compatible and non-pc compatible
 diff --git a/arch/x86/kernel/irqinit.c b/arch/x86/kernel/irqinit.c
-index 70e181e..b74f250 100644
+index 70e181ea1eac..b74f25080d7c 100644
 --- a/arch/x86/kernel/irqinit.c
 +++ b/arch/x86/kernel/irqinit.c
 @@ -158,6 +158,10 @@ static void __init apic_intr_init(void)
@@ -2695,7 +2695,7 @@ index 70e181e..b74f250 100644
  }
 diff --git a/arch/x86/kernel/kml_call_32.h b/arch/x86/kernel/kml_call_32.h
 new file mode 100644
-index 0000000..750ec70
+index 000000000000..750ec70b6517
 --- /dev/null
 +++ b/arch/x86/kernel/kml_call_32.h
 @@ -0,0 +1,157 @@
@@ -2858,7 +2858,7 @@ index 0000000..750ec70
 +#endif
 diff --git a/arch/x86/kernel/kml_syscall_table_32.sh b/arch/x86/kernel/kml_syscall_table_32.sh
 new file mode 100644
-index 0000000..67d88f8
+index 000000000000..67d88f847934
 --- /dev/null
 +++ b/arch/x86/kernel/kml_syscall_table_32.sh
 @@ -0,0 +1,28 @@
@@ -2892,7 +2892,7 @@ index 0000000..67d88f8
 +) > "$out"
 diff --git a/arch/x86/kernel/kml_syscall_table_maker_32.h b/arch/x86/kernel/kml_syscall_table_maker_32.h
 new file mode 100644
-index 0000000..8431f54
+index 000000000000..8431f54ea473
 --- /dev/null
 +++ b/arch/x86/kernel/kml_syscall_table_maker_32.h
 @@ -0,0 +1,69 @@
@@ -2966,7 +2966,7 @@ index 0000000..8431f54
 +
 +#endif
 diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
-index 603c4f9..14fb275 100644
+index 603c4f99cb5a..14fb275ca409 100644
 --- a/arch/x86/kernel/process_32.c
 +++ b/arch/x86/kernel/process_32.c
 @@ -211,9 +211,42 @@ start_thread(struct pt_regs *regs, unsigned long new_ip, unsigned long new_sp)
@@ -3035,7 +3035,7 @@ index 603c4f9..14fb275 100644
  	/*
  	 * Restore IOPL if needed.  In normal use, the flags restore
 diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 67fcc43..4909b8f 100644
+index 67fcc43577d2..4909b8fa6e8f 100644
 --- a/arch/x86/kernel/process_64.c
 +++ b/arch/x86/kernel/process_64.c
 @@ -242,6 +242,9 @@ start_thread_common(struct pt_regs *regs, unsigned long new_ip,
@@ -3096,7 +3096,7 @@ index 67fcc43..4909b8f 100644
  		wrmsrl(MSR_KERNEL_GS_BASE, next->gs);
  	prev->gsindex = gsindex;
 diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-index e504246..3d2e437 100644
+index e5042463c1bc..3d2e437ff877 100644
 --- a/arch/x86/kernel/signal.c
 +++ b/arch/x86/kernel/signal.c
 @@ -57,10 +57,49 @@
@@ -3308,7 +3308,7 @@ index e504246..3d2e437 100644
  }
 diff --git a/arch/x86/kernel/task.c b/arch/x86/kernel/task.c
 new file mode 100644
-index 0000000..7eaec65
+index 000000000000..7eaec652276c
 --- /dev/null
 +++ b/arch/x86/kernel/task.c
 @@ -0,0 +1,201 @@
@@ -3514,7 +3514,7 @@ index 0000000..7eaec65
 +
 +#endif
 diff --git a/arch/x86/kernel/tls.c b/arch/x86/kernel/tls.c
-index 7fc5e84..39b9cb2 100644
+index 7fc5e843f247..39b9cb23b892 100644
 --- a/arch/x86/kernel/tls.c
 +++ b/arch/x86/kernel/tls.c
 @@ -85,12 +85,15 @@ static void set_tls_desc(struct task_struct *p, int idx,
@@ -3545,7 +3545,7 @@ index 7fc5e84..39b9cb2 100644
  	put_cpu();
  }
 diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 4ff5d16..4ee8123 100644
+index 4ff5d162ff9f..4ee812305a3a 100644
 --- a/arch/x86/kernel/traps.c
 +++ b/arch/x86/kernel/traps.c
 @@ -954,7 +954,11 @@ void __init trap_init(void)
@@ -3573,7 +3573,7 @@ index 4ff5d16..4ee8123 100644
  #endif
  
 diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index ede025f..1cc3349 100644
+index ede025fb46f1..1cc3349c3045 100644
 --- a/arch/x86/mm/fault.c
 +++ b/arch/x86/mm/fault.c
 @@ -1063,6 +1063,11 @@ __do_page_fault(struct pt_regs *regs, unsigned long error_code,
@@ -3589,7 +3589,7 @@ index ede025f..1cc3349 100644
  	 * Detect and handle instructions that would cause a page fault for
  	 * both a tracked kernel page and a userspace page.
 diff --git a/arch/x86/syscalls/syscall_32.tbl b/arch/x86/syscalls/syscall_32.tbl
-index b3560ec..2ddd8a3 100644
+index b3560ece1c9f..2ddd8a39b82d 100644
 --- a/arch/x86/syscalls/syscall_32.tbl
 +++ b/arch/x86/syscalls/syscall_32.tbl
 @@ -2,366 +2,366 @@
@@ -4298,7 +4298,7 @@ index b3560ec..2ddd8a3 100644
 +357	i386	bpf			3	0	sys_bpf
 +358	i386	execveat		5	0	sys_execveat			stub32_execveat
 diff --git a/arch/x86/syscalls/syscall_64.tbl b/arch/x86/syscalls/syscall_64.tbl
-index 8d656fb..6165161 100644
+index 8d656fbb57aa..6165161e504e 100644
 --- a/arch/x86/syscalls/syscall_64.tbl
 +++ b/arch/x86/syscalls/syscall_64.tbl
 @@ -2,369 +2,369 @@
@@ -5015,7 +5015,7 @@ index 8d656fb..6165161 100644
 +544	x32	io_submit		-	-	compat_sys_io_submit
 +545	x32	execveat		-	-	stub_x32_execveat
 diff --git a/arch/x86/syscalls/syscallhdr.sh b/arch/x86/syscalls/syscallhdr.sh
-index 31fd5f1..8cf7d0c 100644
+index 31fd5f1f38f7..8cf7d0c5bb69 100644
 --- a/arch/x86/syscalls/syscallhdr.sh
 +++ b/arch/x86/syscalls/syscallhdr.sh
 @@ -14,7 +14,7 @@ grep -E "^[0-9A-Fa-fXx]+[[:space:]]+${my_abis}" "$in" | sort -n | (
@@ -5028,7 +5028,7 @@ index 31fd5f1..8cf7d0c 100644
  	    echo "#define __NR_${prefix}${name} $nr"
  	else
 diff --git a/arch/x86/syscalls/syscalltbl.sh b/arch/x86/syscalls/syscalltbl.sh
-index 0e7f8ec..d93e5d4 100644
+index 0e7f8ec071e7..d93e5d457f79 100644
 --- a/arch/x86/syscalls/syscalltbl.sh
 +++ b/arch/x86/syscalls/syscalltbl.sh
 @@ -4,7 +4,7 @@ in="$1"
@@ -5041,14 +5041,14 @@ index 0e7f8ec..d93e5d4 100644
  	if [ -n "$compat" ]; then
  	    echo "__SYSCALL_${abi}($nr, $entry, $compat)"
 diff --git a/arch/x86/vdso/Makefile b/arch/x86/vdso/Makefile
-index 7b9be98..208cf62 100644
+index 7b9be9822724..ebe022ccec63 100644
 --- a/arch/x86/vdso/Makefile
 +++ b/arch/x86/vdso/Makefile
 @@ -169,11 +169,17 @@ $(vdso32-images:%=$(obj)/%.dbg): $(obj)/vdso32-%.so.dbg: FORCE \
  #
  # The DSO images are built using a special linker script.
  #
-+ifeq ($(CONFIG_KERNEL_MODE_LINUX)$(CONFIG_X86_32),yy) 
++ifeq ($(CONFIG_KERNEL_MODE_LINUX)$(CONFIG_X86_32),yy)
 +checkundef = $(srctree)/$(src)/checkundef-kml-x86-32.sh
 +else
 +checkundef = $(srctree)/$(src)/checkundef.sh
@@ -5065,7 +5065,7 @@ index 7b9be98..208cf62 100644
  	$(call cc-ldoption, -Wl$(comma)--build-id) -Wl,-Bsymbolic $(LTO_CFLAGS)
 diff --git a/arch/x86/vdso/checkundef-kml-x86-32.sh b/arch/x86/vdso/checkundef-kml-x86-32.sh
 new file mode 100644
-index 0000000..262c6f3
+index 000000000000..262c6f3cd32c
 --- /dev/null
 +++ b/arch/x86/vdso/checkundef-kml-x86-32.sh
 @@ -0,0 +1,10 @@
@@ -5080,7 +5080,7 @@ index 0000000..262c6f3
 +    exit 1
 +fi
 diff --git a/arch/x86/vdso/vdso2c.c b/arch/x86/vdso/vdso2c.c
-index 8627db2..aa9d3b1 100644
+index 8627db24a7f6..aa9d3b10f1ff 100644
 --- a/arch/x86/vdso/vdso2c.c
 +++ b/arch/x86/vdso/vdso2c.c
 @@ -102,6 +102,7 @@ struct vdso_sym required_syms[] = {
@@ -5092,7 +5092,7 @@ index 8627db2..aa9d3b1 100644
  
  __attribute__((format(printf, 1, 2))) __attribute__((noreturn))
 diff --git a/arch/x86/vdso/vdso32-setup.c b/arch/x86/vdso/vdso32-setup.c
-index e904c27..a8f6683 100644
+index e904c270573b..a8f668320b32 100644
 --- a/arch/x86/vdso/vdso32-setup.c
 +++ b/arch/x86/vdso/vdso32-setup.c
 @@ -60,6 +60,25 @@ __setup_param("vdso=", vdso_setup, vdso32_setup, 0);
@@ -5133,7 +5133,7 @@ index e904c27..a8f6683 100644
  
  	return 0;
 diff --git a/arch/x86/vdso/vdso32/int80.S b/arch/x86/vdso/vdso32/int80.S
-index b15b7c0..703fef1 100644
+index b15b7c01aedb..703fef1ed257 100644
 --- a/arch/x86/vdso/vdso32/int80.S
 +++ b/arch/x86/vdso/vdso32/int80.S
 @@ -5,6 +5,7 @@
@@ -5146,7 +5146,7 @@ index b15b7c0..703fef1 100644
  	.globl __kernel_vsyscall
 diff --git a/arch/x86/vdso/vdso32/kml.S b/arch/x86/vdso/vdso32/kml.S
 new file mode 100644
-index 0000000..09c9b0c
+index 000000000000..09c9b0c6393e
 --- /dev/null
 +++ b/arch/x86/vdso/vdso32/kml.S
 @@ -0,0 +1,45 @@
@@ -5196,7 +5196,7 @@ index 0000000..09c9b0c
 +
 +#endif
 diff --git a/arch/x86/vdso/vdso32/sysenter.S b/arch/x86/vdso/vdso32/sysenter.S
-index e354bce..c12c5e4 100644
+index e354bceee0e0..c12c5e4e8c12 100644
 --- a/arch/x86/vdso/vdso32/sysenter.S
 +++ b/arch/x86/vdso/vdso32/sysenter.S
 @@ -5,6 +5,7 @@
@@ -5208,7 +5208,7 @@ index e354bce..c12c5e4 100644
  /*
   * The caller puts arg2 in %ecx, which gets pushed. The kernel will use
 diff --git a/arch/x86/vdso/vdso32/vdso32.lds.S b/arch/x86/vdso/vdso32/vdso32.lds.S
-index 31056cf..1154523 100644
+index 31056cf294bf..1154523b22a6 100644
 --- a/arch/x86/vdso/vdso32/vdso32.lds.S
 +++ b/arch/x86/vdso/vdso32/vdso32.lds.S
 @@ -32,6 +32,9 @@ VERSION
@@ -5222,7 +5222,7 @@ index 31056cf..1154523 100644
  	};
  }
 diff --git a/drivers/pnp/pnpbios/bioscalls.c b/drivers/pnp/pnpbios/bioscalls.c
-index 438d4c7..776720e 100644
+index 438d4c72c7b3..776720e8b4a9 100644
 --- a/drivers/pnp/pnpbios/bioscalls.c
 +++ b/drivers/pnp/pnpbios/bioscalls.c
 @@ -86,6 +86,7 @@ static inline u16 call_pnp_bios(u16 func, u16 arg1, u16 arg2, u16 arg3,
@@ -5251,7 +5251,7 @@ index 438d4c7..776720e 100644
  
  	/* If we get here and this is set then the PnP BIOS faulted on us. */
 diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 995986b..c5da202 100644
+index 995986b8e36b..6e57d01a61fc 100644
 --- a/fs/binfmt_elf.c
 +++ b/fs/binfmt_elf.c
 @@ -9,6 +9,10 @@
@@ -5278,59 +5278,19 @@ index 995986b..c5da202 100644
  {
  	unsigned long p = bprm->p;
  	int argc = bprm->argc;
-@@ -660,8 +668,45 @@ static unsigned long randomize_stack_top(unsigned long stack_top)
- #endif
- }
+@@ -662,6 +670,9 @@ static unsigned long randomize_stack_top(unsigned long stack_top)
  
-+#ifdef CONFIG_KERNEL_MODE_LINUX
-+#include <linux/fs_struct.h>
-+/*
-+ * XXX : we haven't implemented safety check of user programs.
-+ */
-+#define TRUSTED_DIR_STR		"/trusted/"
-+#define TRUSTED_DIR_STR_LEN	9
-+
-+static inline int is_safe(struct file* file)
-+{
-+	int ret;
-+	char* path;
-+	char* tmp;
-+
-+#ifdef CONFIG_KML_CHECK_CHROOT
-+	if (current_chrooted()) {
-+		return 0;
-+	}
-+#endif
-+
-+	tmp = (char*)__get_free_page(GFP_KERNEL);
-+
-+	if (!tmp) {
-+		return 0;
-+	}
-+
-+	path = d_path(&file->f_path, tmp, PAGE_SIZE);
-+	ret = (0 == strncmp(TRUSTED_DIR_STR, path, TRUSTED_DIR_STR_LEN));
-+
-+        free_page((unsigned long)tmp);
-+        return ret;
-+}
-+#endif
-+
  static int load_elf_binary(struct linux_binprm *bprm)
  {
 +#ifdef CONFIG_KERNEL_MODE_LINUX
-+	int kernel_mode = 0;
++	int kernel_mode = 1;
 +#endif
  	struct file *interpreter = NULL; /* to shut gcc up */
   	unsigned long load_addr = 0, load_bias = 0;
  	int load_addr_set = 0;
-@@ -1042,8 +1087,15 @@ static int load_elf_binary(struct linux_binprm *bprm)
- #endif /* ARCH_HAS_SETUP_ADDITIONAL_PAGES */
+@@ -1043,7 +1054,11 @@ static int load_elf_binary(struct linux_binprm *bprm)
  
  	install_exec_creds(bprm);
-+#ifdef CONFIG_KERNEL_MODE_LINUX
-+	kernel_mode = is_safe(bprm->file);
-+#endif
  	retval = create_elf_tables(bprm, &loc->elf_ex,
 -			  load_addr, interp_load_addr);
 +			  load_addr, interp_load_addr
@@ -5341,24 +5301,20 @@ index 995986b..c5da202 100644
  	if (retval < 0)
  		goto out;
  	/* N.B. passed_fileno might not be initialized? */
-@@ -1086,7 +1138,15 @@ static int load_elf_binary(struct linux_binprm *bprm)
+@@ -1086,7 +1101,11 @@ static int load_elf_binary(struct linux_binprm *bprm)
  	ELF_PLAT_INIT(regs, reloc_func_desc);
  #endif
  
 +#ifndef CONFIG_KERNEL_MODE_LINUX
  	start_thread(regs, elf_entry, bprm->p);
 +#else
-+	if (kernel_mode) {
-+		start_kernel_thread(regs, elf_entry, bprm->p);
-+	} else {
-+		start_thread(regs, elf_entry, bprm->p);
-+	}
++	start_kernel_thread(regs, elf_entry, bprm->p);
 +#endif
  	retval = 0;
  out:
  	kfree(loc);
 diff --git a/fs/compat_binfmt_elf.c b/fs/compat_binfmt_elf.c
-index 4d24d17..a57204a 100644
+index 4d24d17bcfc1..a57204ad4859 100644
 --- a/fs/compat_binfmt_elf.c
 +++ b/fs/compat_binfmt_elf.c
 @@ -142,4 +142,7 @@ static void cputime_to_compat_timeval(const cputime_t cputime,
@@ -5370,7 +5326,7 @@ index 4d24d17..a57204a 100644
 +#endif
  #include "binfmt_elf.c"
 diff --git a/init/do_mounts.c b/init/do_mounts.c
-index eb41008..cfa65df 100644
+index eb410083e8e0..cfa65df7fb9d 100644
 --- a/init/do_mounts.c
 +++ b/init/do_mounts.c
 @@ -44,6 +44,10 @@ static int root_wait;
@@ -5397,7 +5353,7 @@ index eb41008..cfa65df 100644
  static bool is_tmpfs;
 diff --git a/kernel/Kconfig.kml b/kernel/Kconfig.kml
 new file mode 100644
-index 0000000..9925a1d
+index 000000000000..9925a1d90558
 --- /dev/null
 +++ b/kernel/Kconfig.kml
 @@ -0,0 +1,34 @@
@@ -5436,7 +5392,7 @@ index 0000000..9925a1d
 +
 +endmenu
 diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 9d96e283..168afc6 100644
+index 9d96e283520c..168afc66f164 100644
 --- a/lib/iov_iter.c
 +++ b/lib/iov_iter.c
 @@ -322,7 +322,11 @@ void iov_iter_init(struct iov_iter *i, int direction,
@@ -5452,7 +5408,7 @@ index 9d96e283..168afc6 100644
  		i->type = direction;
  		i->kvec = (struct kvec *)iov;
 diff --git a/mm/memory.c b/mm/memory.c
-index 97839f5..efd6236 100644
+index 97839f5c8c30..efd623660cf4 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
 @@ -3650,7 +3650,11 @@ void might_fault(void)
@@ -5468,7 +5424,7 @@ index 97839f5..efd6236 100644
  
  	/*
 diff --git a/net/9p/client.c b/net/9p/client.c
-index e86a9be..77298b5 100644
+index e86a9bea1d16..77298b51abf5 100644
 --- a/net/9p/client.c
 +++ b/net/9p/client.c
 @@ -842,7 +842,11 @@ static struct p9_req_t *p9_client_zc_rpc(struct p9_client *c, int8_t type,
@@ -5484,7 +5440,7 @@ index e86a9be..77298b5 100644
  
  	err = c->trans_mod->zc_request(c, req, uidata, uodata,
 diff --git a/security/tomoyo/network.c b/security/tomoyo/network.c
-index 9752771..94aed5c 100644
+index 97527710a72a..94aed5cc7364 100644
 --- a/security/tomoyo/network.c
 +++ b/security/tomoyo/network.c
 @@ -608,7 +608,11 @@ static int tomoyo_check_unix_address(struct sockaddr *addr,

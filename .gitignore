@@ -3,3 +3,4 @@
 *.ext4
 mnt/
 kernelbuild/
+rootfsbuild/

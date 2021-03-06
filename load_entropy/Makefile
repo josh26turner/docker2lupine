@@ -1,7 +1,7 @@
 all: load_entropy
 
 load_entropy: load_entropy.c Makefile
-	gcc -Wall -static -o $@ $<
+	gcc -Wall -o $@ $<
 
 install: load_entropy
 	cp load_entropy ../scripts/guest_load_entropy

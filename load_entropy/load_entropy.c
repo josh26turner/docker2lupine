@@ -5,6 +5,8 @@
 #include <linux/random.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <errno.h>
+#include <string.h>
 
 
 uint8_t prng(void) {
@@ -20,7 +22,7 @@ int main(int argc, char **argv)
 {
     struct rand_pool_info *output;
     int max_iters = MAX_ITERS;
-    int iters = 0, ret;
+    int iters = 0, ret, errsv;
 	int fd = open("/dev/random", O_WRONLY);
 
     if (argc == 2)
