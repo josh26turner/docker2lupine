@@ -33,7 +33,7 @@ index 92d5c179..531c7cc5 100644
 +        __asm__ __volatile__ ("call *%1" : "=a"(ret) : "r"(__sysinfo), "a"(n), "D"(a1) : "rcx", "r11", "memory");
 +        return ret;
 +    }
-+#endif   
++#endif
  	__asm__ __volatile__ ("syscall" : "=a"(ret) : "a"(n), "D"(a1) : "rcx", "r11", "memory");
  	return ret;
  }
@@ -76,7 +76,7 @@ index 92d5c179..531c7cc5 100644
 +                              "d"(a3), "r"(r10): "rcx", "r11", "memory");
 +        return ret;
 +    }
-+#endif    
++#endif
  	register long r10 __asm__("r10") = a4;
  	__asm__ __volatile__ ("syscall" : "=a"(ret) : "a"(n), "D"(a1), "S"(a2),
  						  "d"(a3), "r"(r10): "rcx", "r11", "memory");
@@ -138,7 +138,7 @@ index 2f9d5e97..ffb160a4 100644
 +        r = __syscall(nr, u, v, w, x, y, z);
 +#else
 +    r = __syscall_cp_asm(&self->cancel, nr, u, v, w, x, y, z);
-+#endif        
++#endif
  	if (r==-EINTR && nr!=SYS_close && self->cancel &&
  	    self->canceldisable != PTHREAD_CANCEL_DISABLE)
  		r = __cancel();

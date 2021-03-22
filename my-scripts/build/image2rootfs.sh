@@ -42,7 +42,5 @@ sudo cp $guestdir/guest* $mnt
 sudo mkdir -p $mnt/trusted
 sudo cp $guestdir/libc.so $mnt/trusted/libc.so
 
-sudo cp -a lupine_rust $mnt/lupine_rust
-
 sudo umount $mnt
 rmdir $mnt
