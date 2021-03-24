@@ -1,11 +1,20 @@
 all: lat_syscall lat_syscall-static
 
-MUSL_GCC=../../musl/musl-kml/bin/musl-gcc #TODO: setup musl submodule
+MUSL_DIR=../musl/musl-kml/
+MUSL_GCC=$(MUSL_DIR)/bin/musl-gcc
 
-lat_syscall-static: lat_syscall.c Makefile
+libc:
+ifneq ($(shell test -e $(MUSL_GCC) && echo -n yes),yes)
+	make -C ../ musl-kml
+endif
+ifneq ($(shell test -e ./libc.so && echo -n yes),yes)
+	cp $(MUSL_DIR)/lib/libc.so ./
+endif
+
+lat_syscall-static: libc lat_syscall.c Makefile
 	$(MUSL_GCC) -g -o $@ -static lat_syscall.c lib_timing.c
 
-lat_syscall: lat_syscall.c Makefile
+lat_syscall: libc lat_syscall.c Makefile
 	$(MUSL_GCC) -o $@ lat_syscall.c lib_timing.c
 
 docker: Dockerfile lat_syscall lat_syscall-static

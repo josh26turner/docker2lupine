@@ -22,5 +22,5 @@ run_test() {
 }
 
 run_test nokml /libc.so /lat_syscall
-run_test kml /libc-kml.so /lat_syscall
+run_test kml /libc.so /lat_syscall
 run_test kml /lat_syscall-static

@@ -3,6 +3,7 @@
 
 dir="$(dirname `realpath $0`)"
 guestdir=$dir/../guest
+rootfsdir=$dir/../../rootfsbuild
 
 die() { echo "$*" 1>&2 ; exit 1; }
 
@@ -15,7 +16,8 @@ if [ "$container_id" == "" ]; then
     die "empty container id."
 fi
 
-app=$dir/../../rootfsbuild/$(echo $app | tr '/' '-'):$tag
+mkdir -p $rootfsdir
+app=$rootfsdir/$(echo $app | tr '/' '-'):$tag
 docker export $container_id > $app.tar || die "failed to create tar."
 trap "rm $app.tar" EXIT
 docker rm $container_id;

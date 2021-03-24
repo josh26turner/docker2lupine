@@ -1,7 +1,7 @@
 all: hello hello-static
 
-MUSL_DIR=/home/josh/code/year-4/Project/musl/
-MUSL_INSTALL_DIR=/home/josh/code/year-4/Project/musl/musl-kml
+MUSL_DIR=$(PWD)/musl/
+MUSL_INSTALL_DIR=$(MUSL_DIR)/musl-kml
 MUSL_GCC=$(MUSL_INSTALL_DIR)/bin/musl-gcc
 
 hello: libc.so hello.c
@@ -12,8 +12,12 @@ hello-static: libc.so hello.c
 
 .PHONY: always
 libc.so: always
-	make -C $(MUSL_DIR) install \
-	&& cp $(MUSL_INSTALL_DIR)/lib/libc.so .
+ifneq ($(shell test -e $(MUSL_GCC) && echo -n yes),yes)
+	make -C ../ musl-kml
+endif
+ifneq ($(shell test -e ./libc.so && echo -n yes),yes)
+	cp $(MUSL_DIR)/lib/libc.so ./
+endif
 
 docker: Dockerfile hello libc.so
 	docker build -t musl_test .
