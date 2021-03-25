@@ -12,8 +12,8 @@
     "runtime" : {
         "entry_command" : "/path/to/startup/command args",
         "envs" : [
-            { "env1" : "value1" },
-            { "env2" : "value2" }
+            "env1=value1",
+            "env2=value2"
         ],
         "working_directory" : "/path/to/wd",
         "enabled_init_options" : [

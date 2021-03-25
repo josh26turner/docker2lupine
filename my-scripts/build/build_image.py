@@ -84,7 +84,7 @@ def build_fs(fs_path, app_name):
         print(target_dir)
         os.system('sudo mount {rootfsbuild}/{app_name}.ext2 {target_dir}'.format(app_name=app_name, target_dir=target_dir, rootfsbuild=rootfsbuild))
 
-        os.system('sudo tar -xvf {app_name}.tar -C {target} > /dev/null'.format(app_name=app_name, target=target_dir))
+        os.system('sudo tar -xvf {fs} -C {target} > /dev/null'.format(fs=fs_path, target=target_dir))
 
         nodes = [
             ["/dev/null", "666", "c 1 3"],
@@ -121,6 +121,7 @@ if __name__ == "__main__":
     build_all = not (args.kernel or args.filesystem)
 
     name = args.name or os.path.splitext(os.path.split(args.manifest)[-1])[0]
+    print(name)
 
     data = read_manifest(args.manifest)
     if args.filesystem or build_all:
@@ -128,4 +129,4 @@ if __name__ == "__main__":
         build_fs(data['filesystem'], name)
 
     if args.kernel or build_all:
-        build_linux(data['linux_configuration'], args.name)
+        build_linux(data['linux_configuration'], name)
