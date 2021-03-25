@@ -2,6 +2,9 @@
 # This file takes config files and build a kernel base on the config
 # The kernel built would be placed into a directory
 
+dir="$(dirname `realpath $0`)"
+rootdir=$dir/../../
+
 unpatch-linux() {
     pushd $LINUX
     git reset --hard HEAD
@@ -9,15 +12,15 @@ unpatch-linux() {
     popd
 }
 
-KERNELBUILD="$(pwd)/kernelbuild"
-LINUX="linux"
+KERNELBUILD="$rootdir/kernelbuild"
+LINUX="$rootdir/linux"
 if [[ $1 == "nopatch" ]]; then
     echo "You are using nopatch kernel source"
     NOPATCH="true"
     unpatch-linux
     shift
 else
-    make patch-linux || true
+    make -C $rootdir patch-linux || true
 fi
 
 CONFIGS=$@

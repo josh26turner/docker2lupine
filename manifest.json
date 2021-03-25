@@ -1,0 +1,26 @@
+{
+    "linux_configuration" : {
+        "options": [
+            "config",
+            "to",
+            "enable",
+            "above",
+            "base"
+        ],
+        "kml" : true
+    },
+    "runtime" : {
+        "entry_command" : "/path/to/startup/command args",
+        "envs" : [
+            { "env1" : "value1" },
+            { "env2" : "value2" }
+        ],
+        "working_directory" : "/path/to/wd",
+        "enabled_init_options" : [
+            "PROC_FS",
+            "NET_SETUP",
+            "ENTROPY_GEN"
+        ]
+    },
+    "filesystem" : "/path/to/root/fs.tar"
+}
