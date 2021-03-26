@@ -1,6 +1,7 @@
 import json
 import subprocess
 import os
+import sys
 
 from manifest import Manifest, Runtime, LinuxConf
 from argparse import ArgumentParser
@@ -24,7 +25,7 @@ def get_linux_options(app_conf_file_name):
 
 
 def dump_fs(image_name, skip_fs_dump) -> str:
-    tar = image_name.replace(':', '-') + ".tar"
+    tar = image_name.replace(':', '-').replace('/', '-') + ".tar"
     if not skip_fs_dump:
         docker_id = subprocess.check_output(['docker', 'create', image_name]).decode('utf-8').replace('\n', '')
         os.system('docker export {id} > {manifest_out}{tarball}'.format(id=docker_id, tarball=tar, manifest_out=manifest_out))
@@ -32,10 +33,23 @@ def dump_fs(image_name, skip_fs_dump) -> str:
     return manifest_out + tar
 
 
+def get_entry_command(docker_obj) -> str:
+    cmd = docker_obj['Config']['Cmd'] or []
+    entrypoint = docker_obj['Config']['Entrypoint'] or []
+
+    startup = ' '.join(map(lambda x: "'" + x + "'", entrypoint + cmd))
+
+    if len(startup) == 0:
+        print("No entrypoint in image", file=sys.stderr)
+        exit(1)
+
+    return startup
+
+
 def build_manifest(docker_obj, app_conf_file_name, skip_fs_dump, kml) -> Manifest:
     manifest = Manifest()
 
-    manifest.runtime.entry_command = ' '.join(docker_obj['Config']['Cmd']) #TODO: sort out what the startup *should* be
+    manifest.runtime.entry_command = get_entry_command(docker_obj)
     manifest.runtime.envs = docker_obj['Config']['Env']
     manifest.runtime.working_directory = docker_obj['Config']['WorkingDir']
 
@@ -64,7 +78,7 @@ if __name__ == "__main__":
     if not os.path.exists(manifest_out):
         os.mkdir(manifest_out)
 
-    out_file_name = manifest_out + (args.output or args.docker_image + '-' + args.docker_tag + ".json")
+    out_file_name = manifest_out + (args.output or args.docker_image.replace('/', '-') + '-' + args.docker_tag + ".json")
 
     docker_obj = inspect_docker_image(args.docker_image + ':' + args.docker_tag)
     manifest = build_manifest(docker_obj, args.app_conf, args.skip_fs_dump, not args.no_kml)

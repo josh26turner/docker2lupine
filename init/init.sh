@@ -37,4 +37,4 @@ fi
 
 cd $WORKING_DIR
 
-$CMD
+eval "$CMD"
