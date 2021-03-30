@@ -3,7 +3,6 @@ import sys
 import os
 import tempfile
 
-from argparse import ArgumentParser
 from shutil import copyfile
 
 #TODO: musl libc setup
@@ -103,6 +102,7 @@ def build_fs(fs_path, app_name):
                 fs=target_dir))
 
         os.system('sudo cp ./my-scripts/guest/* {target}'.format(target=target_dir))
+        os.system('sudo cp ./my-scripts/guest/libc.so {target}/lib/ld-musl-x86_64.so.1'.format(target=target_dir))
 
         os.system('sudo cp ./init/build/{app_name}/* {target}'.format(target=target_dir, app_name=app_name))
 
@@ -110,6 +110,8 @@ def build_fs(fs_path, app_name):
     return
     
 if __name__ == "__main__":
+    from argparse import ArgumentParser
+    
     parser = ArgumentParser(epilog="Run from the Lupine root directory")
 
     parser.add_argument("manifest")

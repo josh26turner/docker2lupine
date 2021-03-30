@@ -5,3 +5,5 @@ mnt/
 kernelbuild/
 rootfsbuild/
 manifestout/
+firecrackerout/
+straceout/

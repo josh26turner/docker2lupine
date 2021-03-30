@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/libc.so /bin/sh
 
 procfs() {
     echo "Mounting procfs"
@@ -14,11 +14,14 @@ net_setup() {
     ./busybox-x86_64 ip route add default via 192.168.100.1 dev eth0
 
     echo "nameserver 192.168.100.1" > /etc/resolv.conf
+    echo "127.0.0.1       localhost" > /etc/hosts
 }
 
 entropy_gen() {
-    echo "Sleeping"
-    sleep 1
+    echo "Generating entropy"
+    cat /proc/sys/kernel/random/entropy_avail
+    sleep 2
+    cat /proc/sys/kernel/random/entropy_avail
 }
 
 . ./env.sh
@@ -37,4 +40,29 @@ fi
 
 cd $WORKING_DIR
 
-eval "$CMD"
+if [ "$1" = "strace" ]; then
+    shift
+
+    eval strace -ff -o /strace_dump $CMD $@ &
+
+    RES=$(curl 192.168.100.1:8080 2>/dev/null)
+    while [ "$RES" != "Stop" ]; do 
+        RES=$(curl 192.168.100.1:8080 2>/dev/null)
+        sleep 3
+    done
+
+    kill -KILL `pgrep strace`
+
+    ls -l /strace_dump*
+    wc -l /strace_dump*
+
+    STRACE_FILES=/strace_dump*
+
+    # TODO: exfil strace dumps
+
+    curl 192.168.100.1:8080/finish
+else
+    eval $CMD $@
+fi
+
+echo "==============ALL DONE=============="

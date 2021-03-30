@@ -4,12 +4,12 @@ import os
 import sys
 
 from manifest import Manifest, Runtime, LinuxConf
-from argparse import ArgumentParser
 
 manifest_out = 'manifestout/'
 
 
 def inspect_docker_image(docker_image):
+    os.system('docker pull {} 2>/dev/null'.format(docker_image))
     docker_json = subprocess.check_output(['docker', 'inspect', docker_image])
     return json.loads(docker_json)[0]
 
@@ -37,7 +37,7 @@ def get_entry_command(docker_obj) -> str:
     cmd = docker_obj['Config']['Cmd'] or []
     entrypoint = docker_obj['Config']['Entrypoint'] or []
 
-    startup = ' '.join(map(lambda x: "'" + x + "'", entrypoint + cmd))
+    startup = ' '.join(map(lambda x: "'" + x + "'" if ' ' in x else x, entrypoint + cmd))
 
     if len(startup) == 0:
         print("No entrypoint in image", file=sys.stderr)
@@ -64,6 +64,8 @@ def build_manifest(docker_obj, app_conf_file_name, skip_fs_dump, kml) -> Manifes
     
 
 if __name__ == "__main__":
+    from argparse import ArgumentParser
+    
     parser = ArgumentParser(epilog="Run from the Lupine root directory")
 
     parser.add_argument("docker_image")
