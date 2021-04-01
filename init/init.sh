@@ -19,9 +19,10 @@ net_setup() {
 
 entropy_gen() {
     echo "Generating entropy"
-    cat /proc/sys/kernel/random/entropy_avail
-    sleep 2
-    cat /proc/sys/kernel/random/entropy_avail
+    /reseed 2048
+    /reseed 2048
+    /reseed 2048
+    /reseed 2048
 }
 
 . ./env.sh
@@ -43,24 +44,24 @@ cd $WORKING_DIR
 if [ "$1" = "strace" ]; then
     shift
 
-    eval strace -ff -o /strace_dump $CMD $@ &
+    eval strace -ff -o /$NAME $CMD $@ &
 
     RES=$(curl 192.168.100.1:8080 2>/dev/null)
     while [ "$RES" != "Stop" ]; do 
-        RES=$(curl 192.168.100.1:8080 2>/dev/null)
+        RES=$(curl 192.168.100.1:8080 2> /dev/null)
         sleep 3
     done
 
     kill -KILL `pgrep strace`
 
-    ls -l /strace_dump*
-    wc -l /strace_dump*
+    STRACE_FILES=/$NAME*
 
-    STRACE_FILES=/strace_dump*
+    for dump in $STRACE_FILES; do
+        echo -n "$dump: "
+        curl -F file_1=@$dump 192.168.100.1:8080 && echo
+    done
 
-    # TODO: exfil strace dumps
-
-    curl 192.168.100.1:8080/finish
+    curl 192.168.100.1:8080/finish && echo
 else
     eval $CMD $@
 fi

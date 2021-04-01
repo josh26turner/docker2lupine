@@ -7,3 +7,4 @@ rootfsbuild/
 manifestout/
 firecrackerout/
 straceout/
+__pycache__

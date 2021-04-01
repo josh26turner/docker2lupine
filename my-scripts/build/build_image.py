@@ -63,6 +63,7 @@ def build_init(init_options, app_name):
 
         env_file.write('WORKING_DIR="' + init_options['working_directory'] + '"\n')
         env_file.write('CMD="' + init_options['entry_command'] + '"\n')
+        env_file.write('NAME="' + app_name + '"\n')
 
         for opt in init_options['enabled_init_options']:
             env_file.write(opt + "=1" + '\n')
@@ -101,7 +102,8 @@ def build_fs(fs_path, app_name):
                 dev=node[2],
                 fs=target_dir))
 
-        os.system('sudo cp ./my-scripts/guest/* {target}'.format(target=target_dir))
+        os.system('make -C load_entropy install')
+        os.system('sudo cp -r ./my-scripts/guest/* {target}'.format(target=target_dir))
         os.system('sudo cp ./my-scripts/guest/libc.so {target}/lib/ld-musl-x86_64.so.1'.format(target=target_dir))
 
         os.system('sudo cp ./init/build/{app_name}/* {target}'.format(target=target_dir, app_name=app_name))

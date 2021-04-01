@@ -1,10 +1,10 @@
-all: load_entropy
+all: reseed
 
-load_entropy: load_entropy.c Makefile
-	gcc -Wall -o $@ $<
+reseed: reseed.c Makefile
+	../musl/musl-kml/bin/musl-gcc -mrdrnd -static -o $@ $<
 
-install: load_entropy
-	cp load_entropy ../scripts/guest_load_entropy
+install: reseed
+	cp reseed ../my-scripts/guest/reseed
 
 clean:
-	rm -f load_entropy
+	rm -f reseed
