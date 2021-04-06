@@ -1,0 +1,9 @@
+catalyst:
+  files:
+  - /dev/random
+  - /dev/urandom
+  syscalls:
+  - getrandom
+product:
+  init:
+  - ENTROPY_GEN

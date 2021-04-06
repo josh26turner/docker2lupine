@@ -1,0 +1,7 @@
+catalyst:
+  syscalls:
+  - fadvise
+  - madvise
+product:
+  kernel:
+  - CONFIG_ADVISE_SYSCALLS

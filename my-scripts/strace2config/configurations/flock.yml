@@ -1,0 +1,6 @@
+catalyst:
+  syscalls:
+  - flock
+product:
+  kernel:
+  - CONFIG_FILE_LOCKING

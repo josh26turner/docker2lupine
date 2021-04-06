@@ -68,16 +68,16 @@ def parse_line(strace_line: str) -> SysCall or None:
         if strace_line[:3] == '---' or strace_line[:3] == '+++':
             return None
 
-        call = ''.join(read_to(strace_list, '(', ')'))
+        call = ''.join(read_to(strace_list, '('))
 
         args = parse_list(''.join(read_to(strace_list, ')', '(')))
 
         read_to(strace_list, '=')
 
-        res, res_str = parse_res(''.join(read_to(strace_list, '(', ')')).strip())
+        res, res_str = parse_res(''.join(read_to(strace_list, '(')).strip())
 
-        read_to(strace_list, '[', ']')
-        read_to(strace_list, '{', '}')
+        read_to(strace_list, '[')
+        read_to(strace_list, '{')
 
         data = parse_list(''.join(read_to(strace_list, '}', '{')))
 
@@ -95,10 +95,18 @@ def parse_file(strace_file_name: str) -> list[SysCall]:
 
 
 def parse_files(strace_file_names: list[str]) -> list[SysCall]:
-    lines: list[""] = list()
+    lines: list[str] = list()
 
     for strace_file_name in strace_file_names:
         with open(strace_file_name, 'r') as strace_file:
             lines.extend(strace_file.readlines())
 
     return list(filter(lambda x: x is not None, map(parse_line, lines)))
+
+
+def get_files(syscalls: list[SysCall]):
+    return sorted(set(map(lambda x: x.args[0].replace('\"', ''), filter(lambda x: x.name == 'open' and x.res != -1, syscalls))))
+
+
+def get_syscall_names(syscalls: list[SysCall]):
+    return sorted(set(map(lambda x: x.name, syscalls)))

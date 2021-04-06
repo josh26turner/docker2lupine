@@ -1,0 +1,6 @@
+catalyst:
+  syscalls:
+  - futex
+product:
+  kernel:
+  - CONFIG_FUTEX

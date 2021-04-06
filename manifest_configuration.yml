@@ -1,0 +1,14 @@
+catalyst:
+  files:
+  - this/file
+  - that/file
+  syscalls:
+  - this_call
+  - that_call
+product:
+  init:
+  - this_opt
+  - that_opt
+  kernel:
+  - CONFIG_THIS
+  - CONFIG_THAT
