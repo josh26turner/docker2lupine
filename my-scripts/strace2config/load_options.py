@@ -10,6 +10,7 @@ class Catalyst:
     def __init__(self, entries):
         self.files: list[str]
         self.syscalls: list[str]
+        self.sockets: list[str]
         self.__dict__.update(entries)
 
 

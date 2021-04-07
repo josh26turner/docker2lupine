@@ -2,6 +2,9 @@ catalyst:
   files:
   - this/file
   - that/file
+  sockets:
+    - THIS_SOCK_TYPE
+    - THAT_SOCK_TYPE
   syscalls:
   - this_call
   - that_call

@@ -27,9 +27,9 @@ if __name__ == '__main__':
 
     syscalls = parse_files(args.strace_files)
 
-    print(json.dumps(get_socket_types(syscalls)))
-    print(json.dumps(get_syscall_names(syscalls)))
-    print(json.dumps(get_files(syscalls)))
+    # print(json.dumps(get_socket_types(syscalls)))
+    # print(json.dumps(get_syscall_names(syscalls)))
+    # print(json.dumps(get_files(syscalls)))
 
     options = get_all_options()
 
@@ -49,6 +49,16 @@ if __name__ == '__main__':
     for syscall in get_syscall_names(syscalls):
         for opt in options:
             if hasattr(opt.catalyst, 'syscalls') and syscall in opt.catalyst.syscalls:
+                if hasattr(opt.product, 'kernel'):
+                    enabled_kernel_configs.update(opt.product.kernel)
+                if hasattr(opt.product, 'init'):
+                    enabled_init_configs.update(opt.product.init)
+
+                options.remove(opt)
+
+    for socket_type in get_socket_types(syscalls):
+        for opt in options:
+            if hasattr(opt.catalyst, 'sockets') and socket_type in opt.catalyst.sockets:
                 if hasattr(opt.product, 'kernel'):
                     enabled_kernel_configs.update(opt.product.kernel)
                 if hasattr(opt.product, 'init'):
