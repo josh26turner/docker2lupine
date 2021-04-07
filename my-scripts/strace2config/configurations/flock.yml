@@ -1,6 +1,13 @@
 catalyst:
   syscalls:
   - flock
+  sys_args:
+  - call: fcntl
+    arg_pos: 1
+    arg_vals:
+    - F_SETLK
+    - F_SETLKW
+    - F_GETLK
 product:
   kernel:
   - CONFIG_FILE_LOCKING

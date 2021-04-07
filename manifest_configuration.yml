@@ -2,12 +2,20 @@ catalyst:
   files:
   - this/file
   - that/file
-  sockets:
-    - THIS_SOCK_TYPE
-    - THAT_SOCK_TYPE
   syscalls:
   - this_call
   - that_call
+  sys_args:
+  - call: this_call
+    arg_pos: 0
+    arg_vals:
+    - this_arg1
+    - this_arg2
+  - call: that_call
+    arg_pos: 0
+    arg_vals:
+    - that_arg1
+    - that_arg2
 product:
   init:
   - this_opt

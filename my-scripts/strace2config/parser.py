@@ -48,8 +48,7 @@ def try_int(x: str) -> str or int:
 
 def parse_res(x: str) -> (int or str, str):
     try:
-        res = x if x[:2] == '0x' else 0 if x == '?' else int(x)
-        return res, ''
+        return x if x[:2] == '0x' else 0 if x == '?' else int(x), ''
     except ValueError:
         res, res_str = x.split(' ')
         res = int(res)
@@ -58,7 +57,7 @@ def parse_res(x: str) -> (int or str, str):
 
 
 def parse_list(arg_string: str) -> list:
-    return list(map(try_int, arg_string.split(',')))
+    return list(map(lambda x: x.strip() if type(x) == str else x,map(try_int, arg_string.split(','))))
 
 
 def parse_line(strace_line: str) -> SysCall or None:

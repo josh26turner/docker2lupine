@@ -11,7 +11,7 @@ KERNEL_NOT_CONFIGURED = [
 
 
 def check_file_opt(opt: Config, file: str) -> bool:
-    if hasattr(opt.catalyst, 'files'):
+    if opt.catalyst.files is not None:
         for opt_file in opt.catalyst.files:
             if fnmatch.fnmatch(file, opt_file):
                 return True
@@ -27,6 +27,9 @@ if __name__ == '__main__':
 
     syscalls = parse_files(args.strace_files)
 
+    # print(json.dumps(sorted(filter(lambda x: x.res == -1, syscalls))))
+    # print(json.dumps(sorted(set(map(lambda x: x.name, filter(lambda x: x.res == -1, syscalls))))))
+
     # print(json.dumps(get_socket_types(syscalls)))
     # print(json.dumps(get_syscall_names(syscalls)))
     # print(json.dumps(get_files(syscalls)))
@@ -38,33 +41,35 @@ if __name__ == '__main__':
 
     for file in get_files(syscalls):
         for opt in options:
-            if hasattr(opt.catalyst, 'files') and check_file_opt(opt, file):
-                if hasattr(opt.product, 'kernel'):
+            if opt.catalyst.files is not None and check_file_opt(opt, file):
+                if opt.product.kernel is not None:
                     enabled_kernel_configs.update(opt.product.kernel)
-                if hasattr(opt.product, 'init'):
+                if opt.product.init is not None:
                     enabled_init_configs.update(opt.product.init)
 
                 options.remove(opt)
 
     for syscall in get_syscall_names(syscalls):
         for opt in options:
-            if hasattr(opt.catalyst, 'syscalls') and syscall in opt.catalyst.syscalls:
-                if hasattr(opt.product, 'kernel'):
+            if opt.catalyst.syscalls is not None and syscall in opt.catalyst.syscalls:
+                if opt.product.kernel is not None:
                     enabled_kernel_configs.update(opt.product.kernel)
-                if hasattr(opt.product, 'init'):
+                if opt.product.init is not None:
                     enabled_init_configs.update(opt.product.init)
 
                 options.remove(opt)
 
-    for socket_type in get_socket_types(syscalls):
+    for call in syscalls:
         for opt in options:
-            if hasattr(opt.catalyst, 'sockets') and socket_type in opt.catalyst.sockets:
-                if hasattr(opt.product, 'kernel'):
-                    enabled_kernel_configs.update(opt.product.kernel)
-                if hasattr(opt.product, 'init'):
-                    enabled_init_configs.update(opt.product.init)
+            if opt.catalyst.sys_args is not None:
+                for arg in opt.catalyst.sys_args:
+                    if arg.call == call.name and len(call.args) > arg.arg_pos and call.args[arg.arg_pos] in arg.arg_vals:
+                        if opt.product.kernel is not None:
+                            enabled_kernel_configs.update(opt.product.kernel)
+                        if opt.product.init is not None:
+                            enabled_init_configs.update(opt.product.init)
 
-                options.remove(opt)
+                        options.remove(opt)
 
     print(json.dumps(sorted(enabled_init_configs)))
     print(json.dumps(sorted(enabled_kernel_configs)))
