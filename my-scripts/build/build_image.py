@@ -59,7 +59,7 @@ def build_init(init_options, app_name):
     open('./init/env.sh'.format(app_name=app_name), 'w+') .close()
     with open('./init/env.sh'.format(app_name=app_name), 'w+') as env_file:
         for env in init_options['envs']:
-            env_file.write("export " + env + '\n')
+            env_file.write("export '" + env + "'\n")
 
         env_file.write('WORKING_DIR="' + init_options['working_directory'] + '"\n')
         env_file.write('CMD="' + init_options['entry_command'] + '"\n')

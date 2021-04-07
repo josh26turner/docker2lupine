@@ -104,9 +104,13 @@ def parse_files(strace_file_names: list[str]) -> list[SysCall]:
     return list(filter(lambda x: x is not None, map(parse_line, lines)))
 
 
-def get_files(syscalls: list[SysCall]):
+def get_files(syscalls: list[SysCall]) -> list[str]:
     return sorted(set(map(lambda x: x.args[0].replace('\"', ''), filter(lambda x: x.name == 'open' and x.res != -1, syscalls))))
 
 
-def get_syscall_names(syscalls: list[SysCall]):
+def get_syscall_names(syscalls: list[SysCall]) -> list[str]:
     return sorted(set(map(lambda x: x.name, syscalls)))
+
+
+def get_socket_types(syscalls: list[SysCall]) -> list[str]:
+    return sorted(set(x.args[0] for x in filter(lambda x: x.name == 'socket', syscalls)))

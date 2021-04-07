@@ -1,0 +1,17 @@
+catalyst:
+  syscalls:
+  - ipc
+  - msgget
+  - msgsend
+  - msgrcv
+  - msgctl
+  - semget
+  - semop
+  - semct
+  - shmget
+  - shmat
+  - shmdt
+  - shmctl
+product:
+  kernel:
+  - CONFIG_SYSVIPC

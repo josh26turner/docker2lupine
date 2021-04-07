@@ -1,6 +1,7 @@
 catalyst:
   syscalls:
-  - fadvise
+  - fadvise64
+  - fadvise64_64
   - madvise
 product:
   kernel:

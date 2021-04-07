@@ -1,0 +1,14 @@
+catalyst:
+  syscalls:
+  - bind
+product:
+  init:
+  - NET_SETUP
+  kernel:
+  - CONFIG_INET #TODO: setup socket type check
+  - CONFIG_NET_CORE
+  - CONFIG_NETDEVICES
+  - CONFIG_NET
+  - CONFIG_UNIX #TODO: setup socket type check
+  - CONFIG_VIRTIO_NET
+  - CONFIG_VIRTIO

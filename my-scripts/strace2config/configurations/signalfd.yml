@@ -1,0 +1,7 @@
+catalyst:
+  syscalls:
+  - signalfd
+  - signalfd4
+product:
+  kernel:
+  - CONFIG_EVENTFD

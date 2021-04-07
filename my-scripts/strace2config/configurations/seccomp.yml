@@ -1,0 +1,6 @@
+catalyst:
+  syscalls:
+  - seccomp
+product:
+  kernel:
+  - CONFIG_SECCOMP

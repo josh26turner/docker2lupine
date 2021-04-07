@@ -1,0 +1,7 @@
+catalyst:
+  syscalls:
+  - eventfd
+  - eventfd2
+product:
+  kernel:
+  - CONFIG_EVENTFD

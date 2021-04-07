@@ -31,13 +31,13 @@ class Config:
         self.__dict__.update(entries)
 
 
-def get_options(file_name: str):
+def get_options(file_name: str) -> Config:
     with open(os.path.dirname(os.path.realpath(__file__)) + file_name, 'r') as file:
         config: Config = json.loads(json.dumps((yaml.load(file, Loader=yaml.Loader))), object_hook=Config)
         return config
 
 
-def get_all_options(dir=os.path.dirname(os.path.realpath(__file__)) + CONFIG_DIR):
+def get_all_options(dir=os.path.dirname(os.path.realpath(__file__)) + CONFIG_DIR) -> list[Config]:
     opts: list[Config] = []
 
     for file in os.listdir(dir):
