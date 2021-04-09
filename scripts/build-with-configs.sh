@@ -3,7 +3,7 @@
 # The kernel built would be placed into a directory
 
 dir="$(dirname `realpath $0`)"
-rootdir=$dir/../../
+rootdir=$dir/../
 
 unpatch-linux() {
     pushd $LINUX

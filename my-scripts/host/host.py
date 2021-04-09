@@ -31,12 +31,12 @@ if __name__ == "__main__":
 
     time.sleep(1) # Wait for machine start
 
-    os.system('./my-scripts/host/net_setup.sh')
+    os.system('./my-scripts/host/net_setup.sh nat')
 
     if args.strace:
         print('Starting server')
         lupine_server = LupineServer()
-        lupine_server.start_server(ip_addr=args.ip, port=args.p)
+        lupine_server.start_server(ip_addr=args.ip, port=args.port)
 
         print('Run tests or perform a regular usage of the service...')
         input('Press enter when completed')
