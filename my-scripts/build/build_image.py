@@ -4,26 +4,22 @@ import os
 import tempfile
 
 from shutil import copyfile
+from manifest import Manifest, Runtime, LinuxConf
 
 #TODO: musl libc setup
 #TODO: direct init insert w/o recreating whole rootfs
 
-def read_manifest(file_name):
+def read_manifest(file_name: str) -> Manifest:
     try:
         with open(file_name, 'r') as manifest:
-            manifest_data = json.load(manifest)
-            if all(k in ['linux_configuration', "runtime", "filesystem"] for k in manifest_data):
-                return manifest_data
-            else:
-                print("Error in manifest", file=sys.stderr)
-                return None
+            return Manifest.from_dict(json.load(manifest))
     except:
         print("Error opening or reading manifest", file=sys.stderr)
         return None
 
-def build_linux(linux_config, app_name):
+def build_linux(linux_config: LinuxConf, app_name: str) -> None:
     base_file_path = ""
-    if (linux_config['kml']):
+    if (linux_config.kml):
         print("Patching linux")
         os.system("make patch-linux 2>/dev/null >/dev/null")
         base_file_path = "./configs/lupine-djw-kml.config"
@@ -41,7 +37,7 @@ def build_linux(linux_config, app_name):
     copyfile(base_file_path, linux_conf)
 
     with open(linux_conf, 'a') as linux_conf_file:
-        for opt in linux_config['options']:
+        for opt in linux_config.options:
             linux_conf_file.write(opt + "=y\n")
 
     print("Building kernel")
@@ -55,24 +51,24 @@ def build_linux(linux_config, app_name):
 
     return
 
-def build_init(init_options, app_name):
+def build_init(init_options: Runtime, app_name: str) -> None:
     open('./init/env.sh'.format(app_name=app_name), 'w+') .close()
     with open('./init/env.sh'.format(app_name=app_name), 'w+') as env_file:
-        for env in init_options['envs']:
+        for env in init_options.envs:
             env_file.write("export '" + env + "'\n")
 
-        env_file.write('WORKING_DIR="' + init_options['working_directory'] + '"\n')
-        env_file.write('CMD="' + init_options['entry_command'] + '"\n')
+        env_file.write('WORKING_DIR="' + init_options.working_directory + '"\n')
+        env_file.write('CMD="' + init_options.entry_command + '"\n')
         env_file.write('NAME="' + app_name + '"\n')
 
-        for opt in init_options['enabled_init_options']:
+        for opt in init_options.enabled_init_options:
             env_file.write(opt + "=1" + '\n')
         
     os.system('make -C init out=build/{app_name}'.format(app_name=app_name))
 
     return
 
-def build_fs(fs_path, app_name):
+def build_fs(fs_path: str, app_name: str) -> None:
     rootfsbuild = 'rootfsbuild'
     if not os.path.exists(rootfsbuild):
         os.mkdir(rootfsbuild)
@@ -125,12 +121,15 @@ if __name__ == "__main__":
     build_all = not (args.kernel or args.filesystem)
 
     name = args.name or os.path.splitext(os.path.split(args.manifest)[-1])[0]
-    print(name)
 
     data = read_manifest(args.manifest)
+
+    if data is None:
+        exit(1)
+
     if args.filesystem or build_all:
-        build_init(data['runtime'], name)
-        build_fs(data['filesystem'], name)
+        build_init(data.runtime, name)
+        build_fs(data.filesystem, name)
 
     if args.kernel or build_all:
-        build_linux(data['linux_configuration'], name)
+        build_linux(data.linux_configuration, name)

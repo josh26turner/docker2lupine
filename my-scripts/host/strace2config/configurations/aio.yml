@@ -1,0 +1,10 @@
+catalyst:
+  syscalls:
+  - io_setup
+  - io_destroy
+  - io_getevents
+  - io_submit
+  - io_cancel
+product:
+  kernel:
+  - CONFIG_AIO

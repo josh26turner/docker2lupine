@@ -1,0 +1,6 @@
+catalyst:
+  files:
+  - /proc/sys/*
+product:
+  kernel:
+  - CONFIG_PROC_SYSCTL

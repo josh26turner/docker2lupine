@@ -1,8 +1,12 @@
-from http_server import LupineServer, DEFAULT_IP, DEFAULT_PORT
+from http_server import LupineServer, DEFAULT_IP, DEFAULT_PORT, STRACE_OUT
+from strace2config.main import get_min_config
 
+import fnmatch
+import json
 import os
 import time
 
+MANIFEST_OUT = 'manifestout/'
 FIRECRACKER_OUT='firecrackerout/'
 
 if __name__ == "__main__":
@@ -10,8 +14,9 @@ if __name__ == "__main__":
     parser = ArgumentParser(epilog='Run from Lupine root directory')
 
     parser.add_argument('lupine', help='Built image to run')
-    parser.add_argument('-ip', default=DEFAULT_IP)
-    parser.add_argument('-p', default=DEFAULT_PORT)
+    parser.add_argument('--ip', '-a', default=DEFAULT_IP)
+    parser.add_argument('--port','-p', default=DEFAULT_PORT)
+    parser.add_argument('--strace', '-s', action='store_true', help='debug to build minimal manifest')
 
     args = parser.parse_args()
 
@@ -19,20 +24,36 @@ if __name__ == "__main__":
         os.mkdir(FIRECRACKER_OUT)
 
     print('Starting lupine in firecracker')
-    os.system('./my-scripts/host/firecracker-run.sh {lupine} "/init strace" &> {out}{lupine}.log &'.format(lupine=args.lupine, out=FIRECRACKER_OUT))
+    os.system('./my-scripts/host/firecracker-run.sh {lupine} "{init}" &> {out}{lupine}.log &'.format(
+        lupine=args.lupine,
+        out=FIRECRACKER_OUT,
+        init='/init strace' if args.strace else '/init'))
 
-    time.sleep(3) # Wait for machine start
+    time.sleep(1) # Wait for machine start
 
     os.system('./my-scripts/host/net_setup.sh')
 
-    print('Starting server')
-    lupine_server = LupineServer()
-    lupine_server.start_server(ip_addr=args.ip, port=args.p)
+    if args.strace:
+        print('Starting server')
+        lupine_server = LupineServer()
+        lupine_server.start_server(ip_addr=args.ip, port=args.p)
 
-    print('Run tests or perform a regular usage of the service...')
-    input('Press enter when completed')
-    lupine_server.set_done(True)
+        print('Run tests or perform a regular usage of the service...')
+        input('Press enter when completed')
+        lupine_server.set_done(True)
 
-    print('Getting strace files')
-    lupine_server.wait_for_finish()
-    lupine_server.kill_server()
+        print('Getting strace files')
+        lupine_server.wait_for_finish()
+        lupine_server.kill_server()
+
+        init, kernel = get_min_config(list(map(lambda file: STRACE_OUT + file, filter(lambda file: fnmatch.fnmatch(file, args.lupine + '*'), os.listdir(STRACE_OUT)))))
+
+        manifest_name = MANIFEST_OUT + args.lupine + '.json'
+        with open(manifest_name, 'r') as manifest_file:
+            manifest = json.load(manifest_file)
+
+            manifest['linux_configuration']['options'] = kernel
+            manifest['runtime']['enabled_init_options'] = init
+
+            with open(manifest_name, 'w') as manifest_file:
+                json.dump(manifest, manifest_file, default=lambda o: o.__dict__, indent=4)

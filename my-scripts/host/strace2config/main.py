@@ -1,8 +1,8 @@
 import json
 import fnmatch
 
-from parser import parse_files, get_files, get_syscall_names, get_socket_types
-from load_options import get_options, get_all_options, Config
+from strace2config.parser import parse_files, get_files, get_syscall_names, get_socket_types
+from strace2config.load_options import get_options, get_all_options, Config
 
 
 KERNEL_NOT_CONFIGURED = [
@@ -18,21 +18,9 @@ def check_file_opt(opt: Config, file: str) -> bool:
     
     return False
 
-if __name__ == '__main__':
-    from argparse import ArgumentParser
 
-    parser = ArgumentParser()
-    parser.add_argument('strace_files', nargs='+')
-    args = parser.parse_args()
-
-    syscalls = parse_files(args.strace_files)
-
-    # print(json.dumps(sorted(filter(lambda x: x.res == -1, syscalls))))
-    # print(json.dumps(sorted(set(map(lambda x: x.name, filter(lambda x: x.res == -1, syscalls))))))
-
-    # print(json.dumps(get_socket_types(syscalls)))
-    # print(json.dumps(get_syscall_names(syscalls)))
-    # print(json.dumps(get_files(syscalls)))
+def get_min_config(strace_files: list[str]) -> (list[str], list[str]):
+    syscalls = parse_files(strace_files)
 
     options = get_all_options()
 
@@ -71,5 +59,13 @@ if __name__ == '__main__':
 
                         options.remove(opt)
 
-    print(json.dumps(sorted(enabled_init_configs)))
-    print(json.dumps(sorted(enabled_kernel_configs)))
+    return (sorted(enabled_init_configs), sorted(enabled_kernel_configs))
+
+if __name__ == '__main__':
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser()
+    parser.add_argument('strace_files', nargs='+')
+    args = parser.parse_args()
+
+    init, kernel = get_min_config(args.strace_files)

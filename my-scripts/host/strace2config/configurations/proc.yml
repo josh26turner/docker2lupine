@@ -9,4 +9,3 @@ product:
   - PROC_FS
   kernel:
   - CONFIG_PROC_FS
-  - CONFIG_PROC_SYSCTL
