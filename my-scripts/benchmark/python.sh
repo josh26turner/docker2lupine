@@ -1,6 +1,6 @@
 #!/bin/bash -e
 source scripts/run-helper.sh
-itr=50
+itr=10
 
 run_lupine() {
     CONFIG=$1
@@ -15,10 +15,10 @@ run_lupine() {
     done 2>&1 | grep "res:" | cut -d: -f2 | stat
 }
 
-run_bare(){
-    echo -n "bare: "
+run_native(){
+    echo -n "native: "
     for i in `seq $itr`; do
-        python docker/bench.py
+        python3.6 docker/bench.py
     done 2>&1 | grep "res:" | cut -d: -f2 | stat
 }
 
@@ -31,4 +31,4 @@ run_docker(){
 
 run_docker
 run_lupine python-bench
-run_bare
+run_native
