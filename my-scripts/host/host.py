@@ -46,8 +46,10 @@ if __name__ == "__main__":
         lupine_server.wait_for_finish()
         lupine_server.kill_server()
 
+        print('Parsing strace files')
         init, kernel = get_min_config(list(map(lambda file: STRACE_OUT + file, filter(lambda file: fnmatch.fnmatch(file, args.lupine + '*'), os.listdir(STRACE_OUT)))))
 
+        print('Writing new config')
         manifest_name = MANIFEST_OUT + args.lupine + '.json'
         with open(manifest_name, 'r') as manifest_file:
             manifest = json.load(manifest_file)

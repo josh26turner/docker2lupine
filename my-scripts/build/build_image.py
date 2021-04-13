@@ -99,6 +99,9 @@ def build_fs(fs_path: str, app_name: str) -> None:
                 fs=target_dir))
 
         os.system('make -C load_entropy install')
+
+        os.system('sudo ln -s /proc/self/fd {target}/dev/fd'.format(target=target_dir))
+        
         os.system('sudo cp -r ./my-scripts/guest/* {target}'.format(target=target_dir))
         os.system('sudo cp ./my-scripts/guest/libc.so {target}/lib/ld-musl-x86_64.so.1'.format(target=target_dir))
 

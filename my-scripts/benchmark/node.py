@@ -1,6 +1,8 @@
 import json
 import requests
 
+from statistics import mean, pvariance
+
 
 def run_bench(base_url):
     auth_token = ""
@@ -15,7 +17,7 @@ def run_bench(base_url):
         headers={'Authorization': 'Bearer {}'.format(auth_token)})
         .text)
 
-    n = 50
+    n = 30
 
     times = [requests.post(base_url + '/images',
         data={'tripId': trip['id'], 
@@ -25,7 +27,7 @@ def run_bench(base_url):
         files=[('images', open('my-scripts/benchmark/bench_images/IMG.jpg', 'rb')) for x in range(n)]
     ).elapsed.total_seconds() for x in range(10)]
 
-    print(sum(times) / len(times))
+    print(mean(times), pvariance(times))
 
 if __name__ == '__main__':
     from argparse import ArgumentParser

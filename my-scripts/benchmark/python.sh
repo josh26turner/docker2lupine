@@ -8,8 +8,7 @@ run_lupine() {
     shift
     echo -n "lupine: "
     for i in `seq $itr`; do
-        sudo firectl --kernel $KERNEL \
-                --tap-device=tap100/AA:FC:00:00:00:01 \
+        firectl --kernel $KERNEL \
                 --root-drive=rootfsbuild/python-bench.ext2 \
                 --kernel-opts="console=ttyS0 noapic  panic=-1 pci=off nomodules rw init=/init"
     done 2>&1 | grep "res:" | cut -d: -f2 | stat
@@ -18,7 +17,7 @@ run_lupine() {
 run_native(){
     echo -n "native: "
     for i in `seq $itr`; do
-        python3.6 docker/bench.py
+        python3.9 docker/bench.py
     done 2>&1 | grep "res:" | cut -d: -f2 | stat
 }
 
