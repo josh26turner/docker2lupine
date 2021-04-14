@@ -20,3 +20,11 @@ plone               plone:alpine
 spring              openjdk:8-jdk-alpine
 mongo               mvertes/alpine-mongo:latest
 elasticsearch       blacktop/elasticsearch:latest
+wordpress           wordpress:fpm-alpine
+nextcloud           nextcloud:fpm-alpine
+haproxy             haproxy:alpine
+sonarqube           sonarqube:latest
+mosquitto           eclipse-mosquitto:latest
+drupal              drupal:fpm-alpine
+joomla              joomla:fpm-alpine
+convertigo          convertigo:alpine
