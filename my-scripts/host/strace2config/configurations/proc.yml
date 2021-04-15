@@ -1,6 +1,7 @@
 catalyst:
   files:
   - /proc/*
+  - /dev/fd/*
   syscalls:
   - rt_sigprocmask
   - sigprocmask
