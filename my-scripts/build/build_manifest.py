@@ -25,7 +25,7 @@ def get_linux_options(app_conf_file_name):
 
 
 def dump_fs(image_name, skip_fs_dump) -> str:
-    tar = image_name.replace(':', '-').replace('/', '-') + ".tar"
+    tar = image_name.replace(':', '-').replace('/', '-') + '.tar'
     if not skip_fs_dump:
         docker_id = subprocess.check_output(['docker', 'create', image_name]).decode('utf-8').replace('\n', '')
         os.system('docker export {id} > {manifest_out}{tarball}'.format(id=docker_id, tarball=tar, manifest_out=manifest_out))
@@ -37,10 +37,10 @@ def get_entry_command(docker_obj) -> str:
     cmd = docker_obj['Config']['Cmd'] or []
     entrypoint = docker_obj['Config']['Entrypoint'] or []
 
-    startup = ' '.join(map(lambda x: "'" + x + "'" if ' ' in x else x, entrypoint + cmd))
+    startup = ' '.join(map(lambda x: '\'' + x + '\'' if ' ' in x else x, entrypoint + cmd))
 
     if len(startup) == 0:
-        print("No entrypoint in image", file=sys.stderr)
+        print('No entrypoint in image', file=sys.stderr)
         exit(1)
 
     return startup
@@ -63,24 +63,24 @@ def build_manifest(docker_obj, app_conf_file_name, skip_fs_dump, kml) -> Manifes
     return manifest
     
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     from argparse import ArgumentParser
     
-    parser = ArgumentParser(epilog="Run from the Lupine root directory")
+    parser = ArgumentParser(epilog='Run from the Lupine root directory')
 
-    parser.add_argument("docker_image")
-    parser.add_argument("docker_tag", default="latest", nargs='?')
-    parser.add_argument("--output")
-    parser.add_argument("--skip_fs_dump", action="store_true", help='just remake the manifest')
-    parser.add_argument("--no_kml", action="store_true", help='disable KML in the Lupine image')
-    parser.add_argument("--app_conf", help='path to app config file')
+    parser.add_argument('docker_image')
+    parser.add_argument('docker_tag', default='latest', nargs='?')
+    parser.add_argument('--output')
+    parser.add_argument('--skip_fs_dump', action='store_true', help='just remake the manifest')
+    parser.add_argument('--no_kml', action='store_true', help='disable KML in the Lupine image')
+    parser.add_argument('--app_conf', help='path to app config file')
 
     args = parser.parse_args()
 
     if not os.path.exists(manifest_out):
         os.mkdir(manifest_out)
 
-    out_file_name = manifest_out + (args.output or args.docker_image.replace('/', '-') + '-' + args.docker_tag + ".json")
+    out_file_name = manifest_out + (args.output or args.docker_image.replace('/', '-') + '-' + args.docker_tag + '.json')
 
     docker_obj = inspect_docker_image(args.docker_image + ':' + args.docker_tag)
     manifest = build_manifest(docker_obj, args.app_conf, args.skip_fs_dump, not args.no_kml)

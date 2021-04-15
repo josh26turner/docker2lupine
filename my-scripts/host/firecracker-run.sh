@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo firectl \
-    --kernel kernelbuild/$1/vmlinux \
+    --kernel kernelbuild/$1 \
     --root-drive=rootfsbuild/$1.ext2 \
     --ncpus=1 --memory=8192 -d \
     --tap-device=tap100/AA:FC:00:00:00:12 \

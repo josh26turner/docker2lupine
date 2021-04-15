@@ -9,64 +9,65 @@ from manifest import Manifest, Runtime, LinuxConf
 #TODO: musl libc setup
 #TODO: direct init insert w/o recreating whole rootfs
 
+
 def read_manifest(file_name: str) -> Manifest:
     try:
         with open(file_name, 'r') as manifest:
             return Manifest.from_dict(json.load(manifest))
     except:
-        print("Error opening or reading manifest", file=sys.stderr)
+        print('Error opening or reading manifest', file=sys.stderr)
         return None
 
+
 def build_linux(linux_config: LinuxConf, app_name: str) -> None:
-    base_file_path = ""
+    base_file_path = ''
     if (linux_config.kml):
-        print("Patching linux")
-        os.system("make patch-linux 2>/dev/null >/dev/null")
-        base_file_path = "./configs/lupine-djw-kml.config"
+        print('Patching linux')
+        os.system('make patch-linux 2>/dev/null >/dev/null')
+        base_file_path = './configs/lupine-djw-kml.config'
     else:
-        print("Unpatching linux")
-        os.system("make unpatch-linux 2>/dev/null >/dev/null")
-        base_file_path = "./configs/lupine-djw-nokml.config"
+        print('Unpatching linux')
+        os.system('make unpatch-linux 2>/dev/null >/dev/null')
+        base_file_path = './configs/lupine-djw-nokml.config'
 
-    print("Loading config")
+    print('Loading config')
 
-    linux_dir = "./linux/"
-    linux_conf = linux_dir + "/.config"
-    build_dir = "./kernelbuild/"
+    linux_dir = './linux/'
+    linux_conf = linux_dir + '/.config'
+    build_dir = './kernelbuild/'
 
     copyfile(base_file_path, linux_conf)
 
     with open(linux_conf, 'a') as linux_conf_file:
         for opt in linux_config.options:
-            linux_conf_file.write(opt + "=y\n")
+            linux_conf_file.write(opt + '=y\n')
 
-    print("Building kernel")
+    print('Building kernel')
 
-    if not os.path.exists(build_dir + app_name):
-        os.mkdir(build_dir + app_name)
-
-    os.system("yes no | make -C " + linux_dir + " oldconfig")
-    os.system("make build-linux")
-    copyfile(linux_dir + "vmlinux", build_dir + app_name + "/" + "vmlinux")
+    os.system('yes no | make -C ' + linux_dir + ' oldconfig')
+    os.system('make build-linux')
+    copyfile(linux_dir + 'vmlinux', build_dir + app_name)
 
     return
+
 
 def build_init(init_options: Runtime, app_name: str) -> None:
     open('./init/env.sh'.format(app_name=app_name), 'w+') .close()
     with open('./init/env.sh'.format(app_name=app_name), 'w+') as env_file:
         for env in init_options.envs:
-            env_file.write("export '" + env + "'\n")
+            env_file.write('export \'' + env + '\'\n')
 
         env_file.write('WORKING_DIR="' + init_options.working_directory + '"\n')
         env_file.write('CMD="' + init_options.entry_command + '"\n')
         env_file.write('NAME="' + app_name + '"\n')
 
         for opt in init_options.enabled_init_options:
-            env_file.write(opt + "=1" + '\n')
+            env_file.write(opt + '=1\n')
         
     os.system('make -C init out=build/{app_name}'.format(app_name=app_name))
 
     return
+
 
 def build_fs(fs_path: str, app_name: str) -> None:
     rootfsbuild = 'rootfsbuild'
@@ -83,13 +84,13 @@ def build_fs(fs_path: str, app_name: str) -> None:
         os.system('sudo tar -xvf {fs} -C {target} > /dev/null'.format(fs=fs_path, target=target_dir))
 
         nodes = [
-            ["/dev/null", "666", "c 1 3"],
-            ["/dev/zero", "666", "c 1 5"],
-            ["/dev/ptmx", "666", "c 5 2"],
-            ["/dev/tty",  "666", "c 5 0"],
-            ["/dev/random", "444", "c 1 8"],
-            ["/dev/urandom", "444", "c 1 9"],
-            ["/dev/null", "660", "c 1 3"],
+            ['/dev/null', '666', 'c 1 3'],
+            ['/dev/zero', '666', 'c 1 5'],
+            ['/dev/ptmx', '666', 'c 5 2'],
+            ['/dev/tty',  '666', 'c 5 0'],
+            ['/dev/random', '444', 'c 1 8'],
+            ['/dev/urandom', '444', 'c 1 9'],
+            ['/dev/null', '660', 'c 1 3'],
         ]
         for node in nodes:
             os.system('sudo mknod -m {mode} {fs}{pathname} {dev}'.format(
@@ -110,15 +111,15 @@ def build_fs(fs_path: str, app_name: str) -> None:
         os.system('sudo umount {target}'.format(target=target_dir))
     return
     
-if __name__ == "__main__":
+if __name__ == '__main__':
     from argparse import ArgumentParser
     
-    parser = ArgumentParser(epilog="Run from the Lupine root directory")
+    parser = ArgumentParser(epilog='Run from the Lupine root directory')
 
-    parser.add_argument("manifest")
-    parser.add_argument("--name")
-    parser.add_argument("--kernel", action="store_true", help="build the kernel")
-    parser.add_argument("--filesystem", action="store_true", help="create the filesystem")
+    parser.add_argument('manifest')
+    parser.add_argument('--name')
+    parser.add_argument('--kernel', action='store_true', help='build the kernel')
+    parser.add_argument('--filesystem', action='store_true', help='create the filesystem')
 
     args = parser.parse_args()
     build_all = not (args.kernel or args.filesystem)

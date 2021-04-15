@@ -5,11 +5,6 @@ from strace2config.parser import parse_files, get_files, get_syscall_names, get_
 from strace2config.load_options import get_options, get_all_options, Config
 
 
-KERNEL_NOT_CONFIGURED = [
-    "CONFIG_RT_MUTEXES"
-]
-
-
 def check_file_opt(opt: Config, file: str) -> bool:
     if opt.catalyst.files is not None:
         for opt_file in opt.catalyst.files:
@@ -60,6 +55,7 @@ def get_min_config(strace_files: list[str]) -> (list[str], list[str]):
                         options.remove(opt)
 
     return (sorted(enabled_init_configs), sorted(enabled_kernel_configs))
+
 
 if __name__ == '__main__':
     from argparse import ArgumentParser

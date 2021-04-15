@@ -1,6 +1,9 @@
 #!/bin/bash -e
-source scripts/run-helper.sh
 itr=10
+
+stat() {
+    awk '{x+=$0;y+=$0^2}END{print x/NR, sqrt(y/NR-(x/NR)^2)}'
+}
 
 run_lupine() {
     CONFIG=$1

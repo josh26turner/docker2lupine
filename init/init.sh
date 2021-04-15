@@ -41,6 +41,8 @@ fi
 
 cd $WORKING_DIR
 
+echo "==============APP START=============="
+
 if [ "$1" = "strace" ]; then
     shift
 
@@ -66,4 +68,4 @@ else
     eval $CMD $@
 fi
 
-echo "==============ALL DONE=============="
+echo "==============ALL CLOSE=============="

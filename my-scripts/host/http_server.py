@@ -76,7 +76,7 @@ class LupineServer():
 
 
     def kill_server(self):
-        print("Killing server")
+        print('Killing server')
         self.server.shutdown()
 
 
