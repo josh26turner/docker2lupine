@@ -2,7 +2,7 @@ This is ApacheBench, Version 2.3 <$Revision: 1879490 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
 
-Benchmarking 192.168.100.2 (be patient)
+Benchmarking 172.17.0.3 (be patient)
 Completed 10000 requests
 Completed 20000 requests
 Completed 30000 requests
@@ -16,31 +16,31 @@ Completed 100000 requests
 Finished 100000 requests
 
 
-Server Software:        nginx/1.19.10
-Server Hostname:        192.168.100.2
+Server Software:        Apache/2.4.46
+Server Hostname:        172.17.0.3
 Server Port:            80
 
 Document Path:          /index.html
-Document Length:        612 bytes
+Document Length:        45 bytes
 
 Concurrency Level:      1
-Time taken for tests:   7.694 seconds
+Time taken for tests:   11.436 seconds
 Complete requests:      100000
 Failed requests:        0
-Keep-Alive requests:    99900
-Total transferred:      85099500 bytes
-HTML transferred:       61200000 bytes
-Requests per second:    12997.92 [#/sec] (mean)
-Time per request:       0.077 [ms] (mean)
-Time per request:       0.077 [ms] (mean, across all concurrent requests)
-Transfer rate:          10801.92 [Kbytes/sec] received
+Keep-Alive requests:    99010
+Total transferred:      32456441 bytes
+HTML transferred:       4500000 bytes
+Requests per second:    8744.10 [#/sec] (mean)
+Time per request:       0.114 [ms] (mean)
+Time per request:       0.114 [ms] (mean, across all concurrent requests)
+Transfer rate:          2771.51 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    0   0.0      0       1
-Processing:     0    0   0.0      0      11
-Waiting:        0    0   0.0      0      11
-Total:          0    0   0.0      0      11
+Connect:        0    0   0.0      0       0
+Processing:     0    0   0.1      0       5
+Waiting:        0    0   0.0      0       5
+Total:          0    0   0.1      0       5
 
 Percentage of the requests served within a certain time (ms)
   50%      0
@@ -51,4 +51,4 @@ Percentage of the requests served within a certain time (ms)
   95%      0
   98%      0
   99%      0
- 100%     11 (longest request)
+ 100%      5 (longest request)

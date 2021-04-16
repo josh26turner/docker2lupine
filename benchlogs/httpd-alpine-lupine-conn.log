@@ -16,39 +16,38 @@ Completed 100000 requests
 Finished 100000 requests
 
 
-Server Software:        nginx/1.19.10
+Server Software:        Apache/2.4.46
 Server Hostname:        192.168.100.2
 Server Port:            80
 
 Document Path:          /index.html
-Document Length:        612 bytes
+Document Length:        45 bytes
 
 Concurrency Level:      1
-Time taken for tests:   7.694 seconds
+Time taken for tests:   111.241 seconds
 Complete requests:      100000
 Failed requests:        0
-Keep-Alive requests:    99900
-Total transferred:      85099500 bytes
-HTML transferred:       61200000 bytes
-Requests per second:    12997.92 [#/sec] (mean)
-Time per request:       0.077 [ms] (mean)
-Time per request:       0.077 [ms] (mean, across all concurrent requests)
-Transfer rate:          10801.92 [Kbytes/sec] received
+Total transferred:      29100000 bytes
+HTML transferred:       4500000 bytes
+Requests per second:    898.95 [#/sec] (mean)
+Time per request:       1.112 [ms] (mean)
+Time per request:       1.112 [ms] (mean, across all concurrent requests)
+Transfer rate:          255.46 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    0   0.0      0       1
-Processing:     0    0   0.0      0      11
-Waiting:        0    0   0.0      0      11
-Total:          0    0   0.0      0      11
+Connect:        0    0   0.1      0      10
+Processing:     0    1  13.7      1    4334
+Waiting:        0    0  13.7      0    4331
+Total:          1    1  13.7      1    4334
 
 Percentage of the requests served within a certain time (ms)
-  50%      0
-  66%      0
-  75%      0
-  80%      0
-  90%      0
-  95%      0
-  98%      0
-  99%      0
- 100%     11 (longest request)
+  50%      1
+  66%      1
+  75%      1
+  80%      1
+  90%      1
+  95%      1
+  98%      1
+  99%      2
+ 100%   4334 (longest request)
