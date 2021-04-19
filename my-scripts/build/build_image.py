@@ -66,6 +66,13 @@ def build_init(init_options: Runtime, app_name: str) -> None:
         
     os.system('make -C init out=build/{app_name}'.format(app_name=app_name))
 
+    with open('./init/build/{}/init'.format(app_name), 'r+') as init:
+        text = init.read()
+        text = text.replace('exec $CMD', 'exec {}'.format(init_options.entry_command))
+        init.seek(0)
+        init.write(text)
+        init.truncate()
+
     return
 
 

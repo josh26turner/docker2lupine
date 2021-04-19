@@ -5,8 +5,7 @@ catalyst:
   - call: socket
     arg_pos: 0
     arg_vals:
-    - AF_UNIX
-    - AF_LOCAL
+    - AF_INET
 product:
   init:
   - NET_SETUP

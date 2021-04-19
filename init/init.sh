@@ -65,7 +65,7 @@ if [ "$1" = "strace" ]; then
 
     curl 192.168.100.1:8080/finish && echo
 else
-    eval $CMD $@
+    exec $CMD
 fi
 
 echo "==============ALL CLOSE=============="

@@ -6,12 +6,9 @@ stat() {
 }
 
 run_lupine() {
-    CONFIG=$1
-    KERNEL=./kernelbuild/$1/vmlinux
-    shift
     echo -n "lupine: "
     for i in `seq $itr`; do
-        firectl --kernel $KERNEL \
+        firectl --kernel kernelbuild/python-bench \
                 --root-drive=rootfsbuild/python-bench.ext2 \
                 --kernel-opts="console=ttyS0 noapic  panic=-1 pci=off nomodules rw init=/init"
     done 2>&1 | grep "res:" | cut -d: -f2 | stat
@@ -32,5 +29,5 @@ run_docker(){
 }
 
 run_docker
-run_lupine python-bench
+run_lupine
 run_native
