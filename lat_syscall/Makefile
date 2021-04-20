@@ -20,8 +20,5 @@ lat_syscall: libc lat_syscall.c Makefile
 docker: Dockerfile lat_syscall lat_syscall-static
 	docker build -t lat_syscall .
 
-image: docker
-	(cd .. && ./my-scripts/build/image2rootfs.sh lat_syscall latest ext2)
-
 clean:
 	rm -f lat_syscall lat_syscall-static
