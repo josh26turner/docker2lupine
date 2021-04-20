@@ -1,10 +1,12 @@
+*required extra build step for inserting application files as specified in the application instructions.
+
 nginx               nginx:alpine
 httpd               httpd:alpine
 python              python:alpine
-node                node:12-alpine
+node                node:12-alpine*
 java                openjdk:8-jdk-alpine
 traefik             traefik:alpine
-redis               redis:alpine
+redis               redis:alpine*
 influxdb            influxdb:alpine
 vault               vault:latest
 ghost               ghost:alpine
@@ -17,14 +19,14 @@ telegraf            telegraf:alpine
 jenkins             jenkins/jenkins:alpine
 chronograf          chronograf:alpine
 plone               plone:alpine
-spring              openjdk:8-jdk-alpine
-mongo               mvertes/alpine-mongo:latest
+spring              openjdk:8-jdk-alpine*
+mongo               mvertes/alpine-mongo:latest*
 elasticsearch       blacktop/elasticsearch:latest
 wordpress           wordpress:fpm-alpine
 nextcloud           nextcloud:fpm-alpine
-haproxy             haproxy:alpine
+haproxy             haproxy:alpine*
 sonarqube           sonarqube:latest
-mosquitto           eclipse-mosquitto:latest
+mosquitto           eclipse-mosquitto:latest*
 drupal              drupal:fpm-alpine
 joomla              joomla:fpm-alpine
 convertigo          convertigo:alpine
