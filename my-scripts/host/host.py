@@ -8,6 +8,7 @@ import time
 
 MANIFEST_OUT = 'manifestout/'
 FIRECRACKER_OUT='firecrackerout/'
+HOST_DIR=os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == "__main__":
     from argparse import ArgumentParser
@@ -24,14 +25,15 @@ if __name__ == "__main__":
         os.mkdir(FIRECRACKER_OUT)
 
     print('Starting lupine in firecracker')
-    os.system('./my-scripts/host/firecracker-run.sh {lupine} "{init}" &> {out}{lupine}.log &'.format(
+    os.system('{host_dir}/firecracker-run.sh {lupine} "{init}" &> {out}{lupine}.log &'.format(
         lupine=args.lupine,
         out=FIRECRACKER_OUT,
-        init='/init strace' if args.strace else '/init'))
+        init='/init strace' if args.strace else '/init',
+        host_dir=HOST_DIR))
 
     time.sleep(1) # Wait for machine start
 
-    os.system('./my-scripts/host/net_setup.sh nat')
+    os.system('{}/net_setup.sh nat'.format(HOST_DIR))
 
     if args.strace:
         print('Starting server')

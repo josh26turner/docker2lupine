@@ -10,6 +10,8 @@ from manifest import Manifest, Runtime, LinuxConf
 #TODO: direct init insert w/o recreating whole rootfs
 
 
+GUEST_DIR=os.path.dirname(os.path.abspath(__file__))+'/../guest/'
+
 def read_manifest(file_name: str) -> Manifest:
     try:
         with open(file_name, 'r') as manifest:
@@ -52,8 +54,8 @@ def build_linux(linux_config: LinuxConf, app_name: str) -> None:
 
 
 def build_init(init_options: Runtime, app_name: str) -> None:
-    open('./init/env.sh'.format(app_name=app_name), 'w+') .close()
-    with open('./init/env.sh'.format(app_name=app_name), 'w+') as env_file:
+    open('./init/env.sh', 'w+') .close()
+    with open('./init/env.sh', 'w+') as env_file:
         for env in init_options.envs:
             env_file.write('export \'' + env + '\'\n')
 
@@ -110,8 +112,8 @@ def build_fs(fs_path: str, app_name: str) -> None:
 
         os.system('sudo ln -s /proc/self/fd {target}/dev/fd'.format(target=target_dir))
         
-        os.system('sudo cp -r ./my-scripts/guest/* {target}'.format(target=target_dir))
-        os.system('sudo cp ./my-scripts/guest/libc.so {target}/lib/ld-musl-x86_64.so.1'.format(target=target_dir))
+        os.system('sudo cp -r {guest_dir}/* {target}'.format(target=target_dir, guest_dir=GUEST_DIR))
+        os.system('sudo cp {guest_dir}/libc.so {target}/lib/ld-musl-x86_64.so.1'.format(target=target_dir, guest_dir=GUEST_DIR))
 
         os.system('sudo cp ./init/build/{app_name}/* {target}'.format(target=target_dir, app_name=app_name))
 

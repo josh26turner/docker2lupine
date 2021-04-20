@@ -3,6 +3,8 @@ import requests
 
 from statistics import mean, pvariance
 
+BENCH_DIR=os.path.dirname(os.path.abspath(__file__))
+
 
 def run_bench(base_url):
     auth_token = ""
@@ -24,7 +26,7 @@ def run_bench(base_url):
             'metadata': [json.dumps({'date': '1/1/2000', 'location': 'France'}) for x in range(n)]
         },
         headers={'Authorization': 'Bearer {}'.format(auth_token)},
-        files=[('images', open('my-scripts/benchmark/bench_images/IMG.jpg', 'rb')) for x in range(n)]
+        files=[('images', open('{}/bench_images/IMG.jpg'.format(BENCH_DIR), 'rb')) for x in range(n)]
     ).elapsed.total_seconds() for x in range(10)]
 
     print(mean(times), pvariance(times))

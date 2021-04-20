@@ -1,5 +1,7 @@
 #/bin/bash -e
 
+SCRIPT_DIR=$(dirname $0)/
+
 APP_NAME='redis-lupine'
 DOCKER_IM=$(sed 's/-/:/g' <<< $APP_NAME)
 echo $APP_NAME
@@ -15,7 +17,7 @@ run_bench() {
 }
 
 run_lupine() {
-    python my-scripts/host/host.py $APP_NAME
+    python $SCRIPT_DIR/host/host.py $APP_NAME
 
     while ! grep -q "APP START" firecrackerout/$APP_NAME.log; do
         sleep 1
@@ -46,10 +48,10 @@ if [ ! -f kernelbuild/$APP_NAME ]; then
     docker build . -t redis:lupine -f redis.Dockerfile
     popd
 
-    python my-scripts/build/build_manifest.py redis lupine --app_conf configs/apps/redis.config
-    python my-scripts/build/build_image.py manifestout/$APP_NAME.json > /dev/null 2>&1
+    python $SCRIPT_DIR/build/build_manifest.py redis lupine --app_conf configs/apps/redis.config
+    python $SCRIPT_DIR/build/build_image.py manifestout/$APP_NAME.json > /dev/null 2>&1
 else
-    python my-scripts/build/build_image.py manifestout/$APP_NAME.json --filesystem > /dev/null 2>&1
+    python $SCRIPT_DIR/build/build_image.py manifestout/$APP_NAME.json --filesystem > /dev/null 2>&1
 fi
 
 run_lupine

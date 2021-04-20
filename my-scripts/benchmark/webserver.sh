@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+SCRIPT_DIR=$(dirname $0)/
+
 benchmark_webserver(){
     APP_NAME=$1
     DOCKER_IM=$(sed 's/-/:/g' <<< $APP_NAME)
@@ -23,7 +25,7 @@ benchmark_webserver(){
     run_lupine() {
         TYPE=$1
 
-        python my-scripts/host/host.py $APP_NAME
+        python $SCRIPT_DIR/host/host.py $APP_NAME
 
         while ! grep -q "APP START" firecrackerout/$APP_NAME.log; do
             sleep 1
@@ -50,14 +52,14 @@ benchmark_webserver(){
         docker stop $CONTAINER_ID
     }
 
-    python my-scripts/build/build_image.py manifestout/$APP_NAME.json --filesystem > /dev/null 2>&1
+    python $SCRIPT_DIR/build/build_image.py manifestout/$APP_NAME.json --filesystem > /dev/null 2>&1
     run_lupine conn
-    python my-scripts/build/build_image.py manifestout/$APP_NAME.json --filesystem > /dev/null 2>&1
+    python $SCRIPT_DIR/build/build_image.py manifestout/$APP_NAME.json --filesystem > /dev/null 2>&1
     run_lupine sess
 
     run_docker conn
     run_docker sess
 }
 
-# benchmark_webserver nginx-alpine
+benchmark_webserver nginx-alpine
 benchmark_webserver httpd-alpine
