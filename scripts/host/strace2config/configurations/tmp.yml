@@ -1,0 +1,6 @@
+catalyst:
+  files:
+  - /tmp/*
+product:
+  init:
+  - TMP_FS

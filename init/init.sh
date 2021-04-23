@@ -25,6 +25,11 @@ entropy_gen() {
     /reseed 2048
 }
 
+tmpfs() {
+    echo "Mounting tmpfs"
+    mount -t tmpfs tmpfs /tmp
+}
+
 . ./env.sh
 
 if [ "$PROC_FS" = "1" ]; then
@@ -37,6 +42,10 @@ fi
 
 if [ "$ENTROPY_GEN" = "1" ]; then
     entropy_gen
+fi
+
+if [ "$TMP_FS" = "1" ]; then
+    tmpfs
 fi
 
 cd $WORKING_DIR

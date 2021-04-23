@@ -53,7 +53,7 @@ def build_manifest(docker_obj, app_conf_file_name, skip_fs_dump, kml) -> Manifes
     manifest.runtime.envs = docker_obj['Config']['Env']
     manifest.runtime.working_directory = docker_obj['Config']['WorkingDir']
 
-    manifest.runtime.enabled_init_options = ['PROC_FS', 'NET_SETUP', 'ENTROPY_GEN']
+    manifest.runtime.enabled_init_options = ['PROC_FS', 'NET_SETUP', 'ENTROPY_GEN', 'TMP_FS']
 
     manifest.linux_configuration.kml = kml
     manifest.linux_configuration.options = get_linux_options(app_conf_file_name)
