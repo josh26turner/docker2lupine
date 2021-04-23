@@ -13,7 +13,7 @@ vault               vault:latest
 ghost               ghost:alpine
 nats                nats:alpine
 kapacitor           kapacitor:alpine
-arangodb            arangodb:latest
+arangodb            arangodb:latest^
 memcached           memcached:alpine
 rabbitmq            rabbitmq:alpine
 telegraf            telegraf:alpine
