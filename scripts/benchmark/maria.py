@@ -4,7 +4,7 @@ import time
 from statistics import mean, pvariance
 
 
-def run_bench(addr: str, itr: int = 10) -> list[float]:
+def run_bench(addr: str, itr: int = 20) -> list[float]:
     try:
         conn = mariadb.connect(
             user='root',
@@ -37,11 +37,14 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    print('platform: mean variance')
+    print('measured in seconds, lower better')
+
     print('docker:', end=' ', flush=True)
     res = run_bench(args.docker)
-    print(mean(res), pvariance(res))
+    print(round(mean(res), 4), round(pvariance(res), 4))
 
     print('lupine:', end=' ', flush=True)
     res = run_bench(args.lupine)
-    print(mean(res), pvariance(res))
+    print(round(mean(res), 4), round(pvariance(res), 4))
     
