@@ -1,4 +1,5 @@
 *required extra build step for inserting application files as specified in the application instructions.
+^no KML
 
 nginx               nginx:alpine
 httpd               httpd:alpine
@@ -30,3 +31,7 @@ mosquitto           eclipse-mosquitto:latest*
 drupal              drupal:fpm-alpine
 joomla              joomla:fpm-alpine
 convertigo          convertigo:alpine
+mariadb             yobasystems/alpine-mariadb:latest^
+neo4j               neo4j:3.5.5^
+orientdb            orientdb:3.0-tp3-alpine
+postgresql          postgres:alpine

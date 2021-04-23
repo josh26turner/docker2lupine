@@ -1,0 +1,8 @@
+catalyst:
+  syscalls:
+  - timerfd_create
+  - timerfd_settime
+  - timerfd_gettime
+product:
+  kernel:
+  - CONFIG_TIMERFD

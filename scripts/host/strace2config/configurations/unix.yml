@@ -1,4 +1,6 @@
 catalyst:
+  syscalls:
+  - socketpair # Only supports AF_UNIX/AF_LOCAL sockets
   sys_args:
   - call: socket
     arg_pos: 0
