@@ -11,6 +11,7 @@
     },
     "runtime" : {
         "entry_command" : "/path/to/startup/command args",
+        "entry" : ["/path/to/startup/command", "args1", "arg2"],
         "envs" : [
             "env1=value1",
             "env2=value2"
@@ -19,7 +20,8 @@
         "enabled_init_options" : [
             "PROC_FS",
             "NET_SETUP",
-            "ENTROPY_GEN"
+            "ENTROPY_GEN",
+            "TMP_FS"
         ]
     },
     "filesystem" : "/path/to/root/fs.tar"

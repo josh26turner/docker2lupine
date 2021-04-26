@@ -16,6 +16,7 @@ class LinuxConf:
 class Runtime:
     def __init__(self):
         self.entry_command: str
+        self.entry: [str]
         self.envs: list[str]
         self.working_directory: str
         self.enabled_init_options: list[str]
@@ -26,6 +27,7 @@ class Runtime:
         run = cls()
 
         run.entry_command = entries['entry_command']
+        run.entry = entries['entry']
         run.envs = entries['envs']
         run.working_directory = entries['working_directory']
         run.enabled_init_options = entries['enabled_init_options']

@@ -54,17 +54,23 @@ def build_linux(linux_config: LinuxConf, app_name: str) -> None:
 
 
 def build_init(init_options: Runtime, app_name: str) -> None:
-    open('./init/env.sh', 'w+') .close()
-    with open('./init/env.sh', 'w+') as env_file:
+    open('./init/env.h', 'w+').close()
+    with open('./init/env.h', 'w+') as env_file:
+        env_file.write('#define ENV_ARR ')
         for env in init_options.envs:
-            env_file.write('export \'' + env + '\'\n')
+            env_file.write('"' + env + '",')
+        env_file.write('NULL\n')
 
-        env_file.write('WORKING_DIR="' + init_options.working_directory + '"\n')
-        env_file.write('CMD="' + init_options.entry_command + '"\n')
-        env_file.write('NAME="' + app_name + '"\n')
+        env_file.write('#define CMD ')
+        for arg in init_options.entry:
+            env_file.write('"' + arg + '",')
+        env_file.write('NULL\n')
+
+        env_file.write('#define WORKING_DIR "' + init_options.working_directory + '"\n')
+        env_file.write('#define NAME "' + app_name + '"\n')
 
         for opt in init_options.enabled_init_options:
-            env_file.write(opt + '=1\n')
+            env_file.write('#define ' + opt + '\n')
         
     os.system('make -C init out=build/{app_name}'.format(app_name=app_name))
 

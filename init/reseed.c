@@ -28,10 +28,10 @@ struct rand_pool_info {
 	unsigned int buf[0];
 };
 
-int main(int argc, char ** argv) {
+void reseed(void) {
     printf("Reseeding /dev/urandom\n");
 
-    size_t len = atoi(argv[1]);
+    size_t len = 1024;
     struct rand_pool_info *info = malloc(sizeof(struct rand_pool_info) + sizeof(unsigned int) * len);
     info->buf_size = len;
     info->entropy_count = len * sizeof(unsigned int) * 8;
@@ -40,10 +40,6 @@ int main(int argc, char ** argv) {
     if (fd < 0) {
         exit_perror("Unable to open /dev/urandom");
     }
-
-    // if (ioctl(fd, RNDCLEARPOOL) < 0) {
-    //     exit_perror("Error issuing RNDCLEARPOOL operation");
-    // }
 
     // Add the entropy bytes supplied by the user.
     unsigned int num_buf[2];

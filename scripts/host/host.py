@@ -1,4 +1,4 @@
-from http_server import LupineServer, DEFAULT_IP, DEFAULT_PORT, STRACE_OUT
+from socket_server import LupineServer, DEFAULT_IP, DEFAULT_PORT, STRACE_OUT
 from strace2config.main import get_min_config
 
 import fnmatch
@@ -35,18 +35,22 @@ if __name__ == "__main__":
 
     os.system('{}/net_setup.sh nat'.format(HOST_DIR))
 
+    print('Starting server')
+    lupine_server = LupineServer()
+    lupine_server.start_server(ip_addr=args.ip, port=args.port)
+
     if args.strace:
-        print('Starting server')
-        lupine_server = LupineServer()
-        lupine_server.start_server(ip_addr=args.ip, port=args.port)
-
         print('Run tests or perform a regular usage of the service...')
-        input('Press enter when completed')
-        lupine_server.set_done(True)
+    
+    input('Press enter when finished')
+    lupine_server.set_done(True)
+    lupine_server.wait_for_finish()
 
+    if args.strace:
         print('Getting strace files')
-        lupine_server.wait_for_finish()
-        lupine_server.kill_server()
+        os.system('sudo mount rootfsbuild/{lupine}.ext2 /mnt'.format(lupine=args.lupine))
+        os.system('cp /mnt/{lupine}.* straceout/'.format(lupine=args.lupine))
+        os.system('sudo umount /mnt')
 
         print('Parsing strace files')
         init, kernel = get_min_config(list(map(lambda file: STRACE_OUT + file, filter(lambda file: fnmatch.fnmatch(file, args.lupine + '*'), os.listdir(STRACE_OUT)))))
