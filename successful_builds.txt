@@ -22,7 +22,7 @@ chronograf          chronograf:alpine
 plone               plone:alpine
 spring              openjdk:8-jdk-alpine*
 mongo               mvertes/alpine-mongo:latest*
-elasticsearch       blacktop/elasticsearch:latest
+elasticsearch       blacktop/elasticsearch:latest^
 wordpress           wordpress:fpm-alpine
 nextcloud           nextcloud:fpm-alpine
 haproxy             haproxy:alpine*
