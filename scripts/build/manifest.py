@@ -25,7 +25,6 @@ class Runtime:
     def from_dict(cls, entries):
         run = cls()
 
-        run.entry_command = entries['entry_command']
         run.entry = entries['entry']
         run.envs = entries['envs']
         run.working_directory = entries['working_directory']
