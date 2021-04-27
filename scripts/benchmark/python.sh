@@ -14,13 +14,6 @@ run_lupine() {
     done 2>&1 | grep "res:" | cut -d: -f2 | stat
 }
 
-run_native(){
-    echo -n "native: "
-    for i in `seq $itr`; do
-        python3.9 docker/bench.py
-    done 2>&1 | grep "res:" | cut -d: -f2 | stat
-}
-
 run_docker(){
     echo -n "docker: "
     for i in `seq $itr`; do
@@ -28,6 +21,7 @@ run_docker(){
     done 2>&1 | grep "res:" | cut -d: -f2 | stat
 }
 
+echo 'platform: mean variance'
+echo 'measured in seconds, lower better'
 run_docker
 run_lupine
-run_native

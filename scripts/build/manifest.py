@@ -15,7 +15,6 @@ class LinuxConf:
 
 class Runtime:
     def __init__(self):
-        self.entry_command: str
         self.entry: [str]
         self.envs: list[str]
         self.working_directory: str

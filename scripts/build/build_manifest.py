@@ -33,23 +33,10 @@ def dump_fs(image_name, skip_fs_dump) -> str:
     return manifest_out + tar
 
 
-def get_entry_command(docker_obj) -> str:
-    cmd = docker_obj['Config']['Cmd'] or []
-    entrypoint = docker_obj['Config']['Entrypoint'] or []
-
-    startup = ' '.join(map(lambda x: '\'' + x + '\'' if ' ' in x else x, entrypoint + cmd))
-
-    if len(startup) == 0:
-        print('No entrypoint in image', file=sys.stderr)
-        exit(1)
-
-    return startup, entrypoint + cmd
-
-
 def build_manifest(docker_obj, app_conf_file_name, skip_fs_dump, kml) -> Manifest:
     manifest = Manifest()
 
-    manifest.runtime.entry_command, manifest.runtime.entry = get_entry_command(docker_obj)
+    manifest.runtime.entry = docker_obj['Config']['Entrypoint'] or [] + docker_obj['Config']['Cmd'] or []
     manifest.runtime.envs = docker_obj['Config']['Env']
     manifest.runtime.working_directory = docker_obj['Config']['WorkingDir']
 

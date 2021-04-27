@@ -10,8 +10,11 @@
         "kml" : true
     },
     "runtime" : {
-        "entry_command" : "/path/to/startup/command args",
-        "entry" : ["/path/to/startup/command", "args1", "arg2"],
+        "entry" : [
+            "/path/to/startup/command",
+            "args1",
+            "arg2"
+        ],
         "envs" : [
             "env1=value1",
             "env2=value2"
