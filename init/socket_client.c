@@ -1,12 +1,14 @@
 #include <sys/socket.h>
-#include <netinet/ip.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <arpa/inet.h>
 
-#include <errno.h>
+#include "socket_client.h"
 
 #define SERVER_PORT 8080
 #define SERVER_IP "192.168.100.1"
@@ -36,24 +38,51 @@ void setup(void)
 
     inet_pton(AF_INET, SERVER_IP, &server.sin_addr);
 
-    puts("Connecting to server...");
     while (connect(sockfd, (struct sockaddr *)&server, sizeof(server)) < 0);
-    puts("Connected to server");
 }
 
 int get_rsp(void)
 {
     char rd_buffer[MAX_MSG_LEN];
-    ssize_t len;
 
     send(sockfd, GET, strlen(GET), 0);
 
-    len = read(sockfd, rd_buffer, MAX_MSG_LEN);
+    read(sockfd, rd_buffer, MAX_MSG_LEN);
 
-    return strncmp(rd_buffer, STOP, strlen(STOP)) == 0;
+    int ret = strncmp(rd_buffer, STOP, strlen(STOP)) == 0;
+
+    if (ret) close(sockfd);
+
+    return ret;
 }
 
 void done(void)
 {
+    setup();
     send(sockfd, FINISH, strlen(FINISH), 0);
+    close(sockfd);
+}
+
+void sendfile(char *filename)
+{
+    setup();
+    send(sockfd, filename, strlen(filename), 0);
+    close(sockfd);
+
+    int fd = open(filename, O_RDONLY);
+    struct stat buf;
+    fstat(fd, &buf);
+    char len[8];
+    sprintf(len, "%d", buf.st_size);
+
+    setup();
+    send(sockfd, len, strlen(len), 0);
+    close(sockfd);
+
+    setup();
+
+    void *adr = mmap(NULL, buf.st_size, PROT_READ, MAP_SHARED, fd, 0);
+    send(sockfd, adr, buf.st_size, 0);
+
+    close(sockfd);
 }

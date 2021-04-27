@@ -51,11 +51,6 @@ if __name__ == "__main__":
     lupine_server.wait_for_finish()
 
     if args.strace:
-        print('Getting strace files')
-        os.system('sudo mount rootfsbuild/{lupine}.ext2 /mnt'.format(lupine=args.lupine))
-        os.system('cp /mnt/{lupine}.* straceout/'.format(lupine=args.lupine))
-        os.system('sudo umount /mnt')
-
         print('Parsing strace files')
         init, kernel = get_min_config(list(map(lambda file: STRACE_OUT + file, filter(lambda file: fnmatch.fnmatch(file, args.lupine + '*'), os.listdir(STRACE_OUT)))))
 

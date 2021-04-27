@@ -82,12 +82,12 @@ def build_fs(fs_path: str, app_name: str) -> None:
     if not os.path.exists(rootfsbuild):
         os.mkdir(rootfsbuild)
     
-    os.system('dd if=/dev/zero of={rootfsbuild}/{app_name}.ext2 bs=1 count=0 seek=20G'.format(app_name=app_name, rootfsbuild=rootfsbuild))
-    os.system('yes | mkfs.ext4 {rootfsbuild}/{app_name}.ext2'.format(app_name=app_name, rootfsbuild=rootfsbuild))
+    os.system('dd if=/dev/zero of={rootfsbuild}/{app_name}.ext4 bs=1 count=0 seek=20G'.format(app_name=app_name, rootfsbuild=rootfsbuild))
+    os.system('yes | mkfs.ext4 {rootfsbuild}/{app_name}.ext4'.format(app_name=app_name, rootfsbuild=rootfsbuild))
 
     with tempfile.TemporaryDirectory() as target_dir:
         print(target_dir)
-        os.system('sudo mount {rootfsbuild}/{app_name}.ext2 {target_dir}'.format(app_name=app_name, target_dir=target_dir, rootfsbuild=rootfsbuild))
+        os.system('sudo mount {rootfsbuild}/{app_name}.ext4 {target_dir}'.format(app_name=app_name, target_dir=target_dir, rootfsbuild=rootfsbuild))
 
         os.system('sudo tar -xvf {fs} -C {target} > /dev/null'.format(fs=fs_path, target=target_dir))
 
@@ -106,8 +106,6 @@ def build_fs(fs_path: str, app_name: str) -> None:
                 mode=node[1],
                 dev=node[2],
                 fs=target_dir))
-
-        os.system('make -C load_entropy install')
 
         os.system('sudo ln -s /proc/self/fd {target}/dev/fd'.format(target=target_dir))
         

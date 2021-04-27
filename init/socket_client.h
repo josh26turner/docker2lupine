@@ -4,5 +4,6 @@
 void setup(void);
 int get_rsp(void);
 void done(void);
+void sendfile(char *filename);
 
 #endif

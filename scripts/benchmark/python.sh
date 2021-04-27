@@ -9,7 +9,7 @@ run_lupine() {
     echo -n "lupine: "
     for i in `seq $itr`; do
         firectl --kernel kernelbuild/python-bench \
-                --root-drive=rootfsbuild/python-bench.ext2 \
+                --root-drive=rootfsbuild/python-bench.ext4 \
                 --kernel-opts="console=ttyS0 noapic  panic=-1 pci=off nomodules rw init=/init"
     done 2>&1 | grep "res:" | cut -d: -f2 | stat
 }

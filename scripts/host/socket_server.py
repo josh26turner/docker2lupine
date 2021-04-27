@@ -33,12 +33,35 @@ class SocketServer():
                 rd_buffer = conn.recv(1024)
 
                 if rd_buffer == b'get':
-                    conn.sendall(b'cont' if not self.done else b'stop')
-
-                elif rd_buffer == b'finish':
-                    break
+                    if self.done:
+                        conn.sendall(b'stop')
+                        break
+                    else:
+                        conn.sendall(b'cont')
 
                 time.sleep(1)
+
+            while True: # recv files
+                conn, addr = sockfd.accept()
+
+                filename = conn.recv(1024).decode('utf-8').split('/')[-1]
+                
+                if filename == 'finish':
+                    break
+
+                conn, addr = sockfd.accept()
+
+                length = int(conn.recv(1024))
+
+                conn, addr = sockfd.accept()
+
+                contents = b''
+                while len(contents) < length:
+                    contents += conn.recv(length)
+                contents = contents[:length].decode('utf-8')
+
+                with open(STRACE_OUT + filename, 'w') as file:
+                    file.write(contents)
             
             sockfd.shutdown(socket.SHUT_RDWR)
             sockfd.close()

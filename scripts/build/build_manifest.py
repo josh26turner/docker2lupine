@@ -36,7 +36,7 @@ def dump_fs(image_name, skip_fs_dump) -> str:
 def build_manifest(docker_obj, app_conf_file_name, skip_fs_dump, kml) -> Manifest:
     manifest = Manifest()
 
-    manifest.runtime.entry = docker_obj['Config']['Entrypoint'] or [] + docker_obj['Config']['Cmd'] or []
+    manifest.runtime.entry = (docker_obj['Config']['Entrypoint'] or []) + (docker_obj['Config']['Cmd'] or [])
     manifest.runtime.envs = docker_obj['Config']['Env']
     manifest.runtime.working_directory = docker_obj['Config']['WorkingDir']
 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     if not os.path.exists(manifest_out):
         os.mkdir(manifest_out)
 
-    out_file_name = manifest_out + (args.output or args.docker_image.replace('/', '-') + '-' + args.docker_tag + '.json')
+    out_file_name = manifest_out + (args.output or (args.docker_image.replace('/', '-') + '-' + args.docker_tag)) + '.json'
 
     docker_obj = inspect_docker_image(args.docker_image + ':' + args.docker_tag)
     manifest = build_manifest(docker_obj, args.app_conf, args.skip_fs_dump, not args.no_kml)
