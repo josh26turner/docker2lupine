@@ -6,6 +6,7 @@ stat() {
 }
 
 run_bench() {
+    PGPASSWORD=pass pgbench -i -U postgres -h $1 > /dev/null 2>&1
     for i in `seq $itr`; do
         PGPASSWORD=pass pgbench -U postgres -h $1 2> /dev/null | grep excluding | cut -d= -f 2 | cut -d\( -f 1 | sed 's/ //g'
     done | stat

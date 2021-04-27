@@ -74,13 +74,6 @@ def build_init(init_options: Runtime, app_name: str) -> None:
         
     os.system('make -C init out=build/{app_name}'.format(app_name=app_name))
 
-    with open('./init/build/{}/init'.format(app_name), 'r+') as init:
-        text = init.read()
-        text = text.replace('exec $CMD', 'exec {}'.format(init_options.entry_command))
-        init.seek(0)
-        init.write(text)
-        init.truncate()
-
     return
 
 
@@ -90,7 +83,7 @@ def build_fs(fs_path: str, app_name: str) -> None:
         os.mkdir(rootfsbuild)
     
     os.system('dd if=/dev/zero of={rootfsbuild}/{app_name}.ext2 bs=1 count=0 seek=20G'.format(app_name=app_name, rootfsbuild=rootfsbuild))
-    os.system('yes | mkfs.ext2 {rootfsbuild}/{app_name}.ext2'.format(app_name=app_name, rootfsbuild=rootfsbuild))
+    os.system('yes | mkfs.ext4 {rootfsbuild}/{app_name}.ext2'.format(app_name=app_name, rootfsbuild=rootfsbuild))
 
     with tempfile.TemporaryDirectory() as target_dir:
         print(target_dir)
@@ -99,13 +92,13 @@ def build_fs(fs_path: str, app_name: str) -> None:
         os.system('sudo tar -xvf {fs} -C {target} > /dev/null'.format(fs=fs_path, target=target_dir))
 
         nodes = [
-            ['/dev/null', '666', 'c 1 3'],
-            ['/dev/zero', '666', 'c 1 5'],
-            ['/dev/ptmx', '666', 'c 5 2'],
-            ['/dev/tty',  '666', 'c 5 0'],
+            ['/dev/null',   '666', 'c 1 3'],
+            ['/dev/zero',   '666', 'c 1 5'],
+            ['/dev/ptmx',   '666', 'c 5 2'],
+            ['/dev/tty',    '666', 'c 5 0'],
             ['/dev/random', '444', 'c 1 8'],
-            ['/dev/urandom', '444', 'c 1 9'],
-            ['/dev/null', '660', 'c 1 3'],
+            ['/dev/urandom','444', 'c 1 9'],
+            ['/dev/null',   '660', 'c 1 3'],
         ]
         for node in nodes:
             os.system('sudo mknod -m {mode} {fs}{pathname} {dev}'.format(

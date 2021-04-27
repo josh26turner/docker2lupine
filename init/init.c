@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
 
     puts("=========APP INIT=========");
 
+    #ifdef NET_SETUP
     int pid = fork();
 
     if (pid == 0)
@@ -76,6 +77,18 @@ int main(int argc, char *argv[])
     kill(pid, SIGKILL);
 
     done();
+    #else
+    if (argc >= 2 && strcmp("strace", argv[1]) == 0)
+    {
+        char *cmd[] = {STRACE_ARGS, NAME, CMD};
+        execvp(cmd[0], cmd);
+    }
+    else
+    {
+        char *cmd[] = {CMD};
+        execvp(cmd[0], cmd);
+    }
+    #endif
 
     puts("=========FINISHED=========");
 }
