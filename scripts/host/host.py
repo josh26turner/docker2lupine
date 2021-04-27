@@ -18,6 +18,7 @@ if __name__ == "__main__":
     parser.add_argument('--ip', '-a', default=DEFAULT_IP)
     parser.add_argument('--port','-p', default=DEFAULT_PORT)
     parser.add_argument('--strace', '-s', action='store_true', help='debug to build minimal manifest')
+    parser.add_argument('--no_net', '-n', action='store_true', help='don\'t start a server or setup guest networking')
 
     args = parser.parse_args()
 
@@ -31,6 +32,9 @@ if __name__ == "__main__":
         init='/init strace' if args.strace else '/init',
         host_dir=HOST_DIR))
 
+    if args.no_net:
+        exit(0)
+    
     time.sleep(1) # Wait for machine start
 
     os.system('{}/net_setup.sh nat'.format(HOST_DIR))

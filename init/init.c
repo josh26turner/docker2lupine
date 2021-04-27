@@ -11,9 +11,16 @@
 
 #define STRACE_ARGS "strace","-ff","-o"
 
-void load_env(char **env)
-{
-    for (int i = 0; env[i] != NULL; i ++) putenv(env[i]);
+#define exec_app(strace)                    \
+if (strace)                                 \
+{                                           \
+    char *cmd[] = {STRACE_ARGS, NAME, CMD}; \
+    execvp(cmd[0], cmd);                    \
+}                                           \
+else                                        \
+{                                           \
+    char *cmd[] = {CMD};                    \
+    execvp(cmd[0], cmd);                    \
 }
 
 int main(int argc, char *argv[])
@@ -48,25 +55,15 @@ int main(int argc, char *argv[])
     chdir(WORKING_DIR);
 
     char *env[] = {ENV_ARR};
-    load_env(env);
+    for (int i = 0; env[i] != NULL; i ++) putenv(env[i]);
 
     puts("=========APP INIT=========");
-
     #ifdef NET_SETUP
     int pid = fork();
 
     if (pid == 0)
     {    
-        if (argc >= 2 && strcmp("strace", argv[1]) == 0)
-        {
-            char *cmd[] = {STRACE_ARGS, NAME, CMD};
-            execvp(cmd[0], cmd);
-        }
-        else
-        {
-            char *cmd[] = {CMD};
-            execvp(cmd[0], cmd);
-        }
+        exec_app(argc >= 2 && strcmp("strace", argv[1]) == 0);
     }
 
     //Socket comms
@@ -78,17 +75,7 @@ int main(int argc, char *argv[])
 
     done();
     #else
-    if (argc >= 2 && strcmp("strace", argv[1]) == 0)
-    {
-        char *cmd[] = {STRACE_ARGS, NAME, CMD};
-        execvp(cmd[0], cmd);
-    }
-    else
-    {
-        char *cmd[] = {CMD};
-        execvp(cmd[0], cmd);
-    }
+    exec_app(argc >= 2 && strcmp("strace", argv[1]) == 0);
     #endif
-
     puts("=========FINISHED=========");
 }
