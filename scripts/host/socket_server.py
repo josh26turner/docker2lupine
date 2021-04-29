@@ -27,7 +27,7 @@ class SocketServer():
             sockfd.listen(5)
 
             conn, addr = sockfd.accept()
-            print('\nGuest connected on {}'.format(addr))
+            print('\nGuest connected from {}'.format(addr[0]))
 
             while True:
                 rd_buffer = conn.recv(1024)
@@ -41,6 +41,8 @@ class SocketServer():
 
                 time.sleep(1)
 
+            print("Getting strace logs...")
+            files = []
             while True: # recv files
                 conn, addr = sockfd.accept()
 
@@ -48,6 +50,7 @@ class SocketServer():
                 
                 if filename == 'finish':
                     break
+                print("    " + filename)
 
                 conn, addr = sockfd.accept()
 
@@ -58,8 +61,13 @@ class SocketServer():
                 contents = b''
                 while len(contents) < length:
                     contents += conn.recv(length)
+                conn.sendall(b'done')
+                
                 contents = contents[:length].decode('utf-8')
 
+                files.append((filename, contents))
+
+            for filename, contents in files:
                 with open(STRACE_OUT + filename, 'w') as file:
                     file.write(contents)
             

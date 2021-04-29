@@ -15,7 +15,7 @@
 
 #define GET "get"
 #define FINISH "finish"
-
+#define DONE "done"
 #define STOP "stop"
 
 #define MAX_MSG_LEN 10
@@ -83,6 +83,9 @@ void sendfile(char *filename)
 
     void *adr = mmap(NULL, buf.st_size, PROT_READ, MAP_SHARED, fd, 0);
     send(sockfd, adr, buf.st_size, 0);
+
+    char rd_buffer[MAX_MSG_LEN];
+    while (strncmp(rd_buffer, DONE, strlen(DONE)) != 0) read(sockfd, rd_buffer, MAX_MSG_LEN);
 
     close(sockfd);
 }

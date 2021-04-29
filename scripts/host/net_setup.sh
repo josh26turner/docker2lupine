@@ -1,3 +1,7 @@
+while ! ip addr | grep tap100 > /dev/null; do
+    :
+done
+
 sudo ip addr add 192.168.100.1/24 dev tap100 
 sudo ip link set tap100 up
 
