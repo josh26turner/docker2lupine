@@ -1,0 +1,4 @@
+platform: mean variance
+measured in requests per second, higher better
+lupine: 5736.55 707.949
+docker: 6717.47 743.058
