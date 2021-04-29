@@ -62,7 +62,10 @@ if __name__ == "__main__":
 
         exit(0)
     
-    time.sleep(1) # Wait for machine start
+    # Wait for host startup, network device creation
+    with open('{out}{lupine}.log'.format(lupine=args.lupine, out=FIRECRACKER_OUT), 'r') as log_file:
+        while 'createNetworkInterface returned' not in log_file.read():
+            pass
 
     os.system('{}/net_setup.sh nat'.format(HOST_DIR))
 
