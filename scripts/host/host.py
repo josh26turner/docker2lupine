@@ -10,6 +10,22 @@ MANIFEST_OUT = 'manifestout/'
 FIRECRACKER_OUT='firecrackerout/'
 HOST_DIR=os.path.dirname(os.path.abspath(__file__))
 
+def update_config(lupine: str) -> None:
+    print('Parsing strace files')
+    init, kernel = get_min_config(list(map(lambda file: STRACE_OUT + file, filter(lambda file: fnmatch.fnmatch(file, lupine + '*'), os.listdir(STRACE_OUT)))))
+
+    print('Writing new config')
+    manifest_name = MANIFEST_OUT + lupine + '.json'
+    with open(manifest_name, 'r') as manifest_file:
+        manifest = json.load(manifest_file)
+
+        manifest['linux_configuration']['options'] = kernel
+        manifest['runtime']['enabled_init_options'] = init
+
+        with open(manifest_name, 'w') as manifest_file:
+            json.dump(manifest, manifest_file, default=lambda o: o.__dict__, indent=4)
+
+
 if __name__ == "__main__":
     from argparse import ArgumentParser
     parser = ArgumentParser(epilog='Run from Lupine root directory')
@@ -33,6 +49,17 @@ if __name__ == "__main__":
         host_dir=HOST_DIR))
 
     if args.no_net:
+        if args.strace:
+            with open('{out}{lupine}.log'.format(lupine=args.lupine, out=FIRECRACKER_OUT), 'r') as log_file:
+                while 'stopVMM()' not in log_file.read():
+                    time.sleep(1)
+            
+            os.system('sudo mount rootfsbuild/{lupine}.ext4 /mnt'.format(lupine=args.lupine))
+            os.system('cp /mnt/{lupine}* straceout'.format(lupine=args.lupine))
+            os.system('sudo umount /mnt')
+
+            update_config(args.lupine)
+
         exit(0)
     
     time.sleep(1) # Wait for machine start
@@ -51,16 +78,4 @@ if __name__ == "__main__":
     lupine_server.wait_for_finish()
 
     if args.strace:
-        print('Parsing strace files')
-        init, kernel = get_min_config(list(map(lambda file: STRACE_OUT + file, filter(lambda file: fnmatch.fnmatch(file, args.lupine + '*'), os.listdir(STRACE_OUT)))))
-
-        print('Writing new config')
-        manifest_name = MANIFEST_OUT + args.lupine + '.json'
-        with open(manifest_name, 'r') as manifest_file:
-            manifest = json.load(manifest_file)
-
-            manifest['linux_configuration']['options'] = kernel
-            manifest['runtime']['enabled_init_options'] = init
-
-            with open(manifest_name, 'w') as manifest_file:
-                json.dump(manifest, manifest_file, default=lambda o: o.__dict__, indent=4)
+        update_config(args.lupine)

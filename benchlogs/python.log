@@ -1,0 +1,4 @@
+platform: mean variance
+measured in seconds, lower better
+docker: 8.08356 0.0752679
+lupine: 7.39773 0.0993495
