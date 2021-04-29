@@ -1,33 +1,12 @@
-import json
 import requests
 
 from statistics import mean, pvariance
 
-BENCH_DIR=os.path.dirname(os.path.abspath(__file__))
-
 
 def run_bench(base_url):
-    auth_token = ""
-    try:
-        auth_token = json.loads(requests.post(base_url + '/register', data={'username': 'user', 'password': '1234'}).text)['token']
-    except KeyError:
-        auth_token = json.loads(requests.post(base_url + '/login', data={'username': 'user', 'password': '1234'}).text)['token']
+    n = 10
 
-
-    trip = json.loads(requests.post(base_url + '/trip', 
-        data={'name': 'trip'},
-        headers={'Authorization': 'Bearer {}'.format(auth_token)})
-        .text)
-
-    n = 30
-
-    times = [requests.post(base_url + '/images',
-        data={'tripId': trip['id'], 
-            'metadata': [json.dumps({'date': '1/1/2000', 'location': 'France'}) for x in range(n)]
-        },
-        headers={'Authorization': 'Bearer {}'.format(auth_token)},
-        files=[('images', open('{}/bench_images/IMG.jpg'.format(BENCH_DIR), 'rb')) for x in range(n)]
-    ).elapsed.total_seconds() for x in range(10)]
+    times = [requests.get(base_url).elapsed.total_seconds() for x in range(10)]
 
     print(mean(times), pvariance(times))
 
@@ -41,11 +20,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    print('platform: mean variance')
+    print('measured in seconds, lower better')
+
     print('docker:', end=' ', flush=True)
     run_bench(args.docker)
 
     print('lupine:', end=' ', flush=True)
     run_bench(args.lupine)
-
-    print('native:', end=' ', flush=True)
-    run_bench(args.native)
