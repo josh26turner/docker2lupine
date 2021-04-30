@@ -24,16 +24,16 @@ def get_linux_options(app_conf_file_name):
         return confs
 
 
-def dump_fs(image_name, skip_fs_dump) -> str:
-    tar = image_name.replace(':', '-').replace('/', '-') + '.tar'
+def dump_fs(image_name, skip_fs_dump, output) -> str:
+    tar = output + '.tar'
     if not skip_fs_dump:
         docker_id = subprocess.check_output(['docker', 'create', image_name]).decode('utf-8').replace('\n', '')
-        os.system('docker export {id} > {manifest_out}{tarball}'.format(id=docker_id, tarball=tar, manifest_out=manifest_out))
+        os.system('docker export {id} > {tarball}'.format(id=docker_id, tarball=tar))
         os.system('docker rm {} > /dev/null'.format(docker_id))
-    return manifest_out + tar
+    return tar
 
 
-def build_manifest(docker_obj, app_conf_file_name, skip_fs_dump, kml) -> Manifest:
+def build_manifest(docker_obj, app_conf_file_name, skip_fs_dump, kml, output) -> Manifest:
     manifest = Manifest()
 
     manifest.runtime.entry = (docker_obj['Config']['Entrypoint'] or []) + (docker_obj['Config']['Cmd'] or [])
@@ -45,7 +45,7 @@ def build_manifest(docker_obj, app_conf_file_name, skip_fs_dump, kml) -> Manifes
     manifest.linux_configuration.kml = kml
     manifest.linux_configuration.options = get_linux_options(app_conf_file_name)
 
-    manifest.filesystem = dump_fs(docker_obj['RepoTags'][0], skip_fs_dump)
+    manifest.filesystem = dump_fs(docker_obj['RepoTags'][0], skip_fs_dump, output)
 
     return manifest
     
@@ -67,11 +67,11 @@ if __name__ == '__main__':
     if not os.path.exists(manifest_out):
         os.mkdir(manifest_out)
 
-    out_file_name = manifest_out + (args.output or (args.docker_image.replace('/', '-') + '-' + args.docker_tag)) + '.json'
+    output = manifest_out + (args.output or (args.docker_image.replace('/', '-') + '-' + args.docker_tag))
 
     docker_obj = inspect_docker_image(args.docker_image + ':' + args.docker_tag)
-    manifest = build_manifest(docker_obj, args.app_conf, args.skip_fs_dump, not args.no_kml)
+    manifest = build_manifest(docker_obj, args.app_conf, args.skip_fs_dump, not args.no_kml, output)
 
-    with open(out_file_name, 'w') as out_file:
+    with open(output + '.json', 'w') as out_file:
         json.dump(manifest, out_file, default=lambda o: o.__dict__, indent=4,)
-        print(out_file_name)
+        print(output + '.json')
