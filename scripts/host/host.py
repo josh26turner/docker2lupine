@@ -12,7 +12,7 @@ HOST_DIR=os.path.dirname(os.path.abspath(__file__))
 
 def update_config(lupine: str) -> None:
     print('Parsing strace files')
-    init, kernel = get_min_config(list(map(lambda file: STRACE_OUT + file, filter(lambda file: fnmatch.fnmatch(file, lupine + '*'), os.listdir(STRACE_OUT)))))
+    init, kernel = get_min_config(list(map(lambda file: STRACE_OUT + file, filter(lambda file: fnmatch.fnmatch(file, lupine + '.*'), os.listdir(STRACE_OUT)))))
 
     print('Writing new config')
     manifest_name = MANIFEST_OUT + lupine + '.json'

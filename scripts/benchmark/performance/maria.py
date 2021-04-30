@@ -32,19 +32,9 @@ if __name__ == "__main__":
     from argparse import ArgumentParser
     parser = ArgumentParser(epilog='Run from Lupine root directory')
 
-    parser.add_argument('--docker', help='Docker instance base url')
-    parser.add_argument('--lupine', help='Lupine instance base url')
+    parser.add_argument('ip_address', help='MariaDB IP address')
+    parser.add_argument('itr', default=20, type=int, help='number of iterations', nargs='?')
 
     args = parser.parse_args()
-
-    print('platform: mean variance')
-    print('measured in seconds, lower better')
-
-    print('docker:', end=' ', flush=True)
-    res = run_bench(args.docker)
-    print(round(mean(res), 4), round(pvariance(res), 4))
-
-    print('lupine:', end=' ', flush=True)
-    res = run_bench(args.lupine)
-    print(round(mean(res), 4), round(pvariance(res), 4))
-    
+    res = run_bench(args.ip_address, itr=args.itr)
+    print(str(round(mean(res), 4)) + ',' + str(round(pvariance(res) ** 0.5, 4)))

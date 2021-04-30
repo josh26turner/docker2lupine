@@ -1,22 +1,12 @@
 #!/bin/bash -e
-itr=10
+itr=2
 
-APP=memcached
-DOCKER_IM=memcached
-DOCKER_TAG=alpine
-LOG_FILE=benchlogs/$APP-higher.csv
+APP=node
+DOCKER_IM=node
+DOCKER_TAG=bench
+LOG_FILE=benchlogs/$APP-lower.csv
 SCRIPT_DIR=$(dirname $0)/../..
 BENCH_DIR=$(dirname $0)
-
-stat() {
-    awk '{x+=$0;y+=$0^2}END{print x/NR","sqrt(y/NR-(x/NR)^2)}'
-}
-
-run_bench() {
-    for i in `seq $itr`; do
-        memtier_benchmark --protocol=memcache_text --server=$1 --port=11211 -t 1 2>/dev/null | grep Totals | sed 's/  */ /g' | cut -d' ' -f2
-    done | python $SCRIPT_DIR/benchmark/stat.py >> $LOG_FILE
-}
 
 run_docker() {
     CONTAINER_ID=$(docker run --cpus 1 --rm -d $DOCKER_IM:$DOCKER_TAG)
@@ -24,7 +14,7 @@ run_docker() {
 
     sleep 5
 
-    run_bench $CONTAINER_IP
+    python $BENCH_DIR/$APP.py $CONTAINER_IP >> $LOG_FILE
 
     docker stop $CONTAINER_ID > /dev/null
 }
@@ -36,12 +26,12 @@ run_lupine_tests() {
         sleep 1
     done
 
-    sleep 2
+    sleep 1
 
     if [ "opt" = "$1" ]; then
-        memtier_benchmark --protocol=memcache_text --server=192.168.100.2 --port=11211 -t 1 2>/dev/null
+        python $BENCH_DIR/$APP.py 192.168.100.2 1
     else
-        run_bench 192.168.100.2 >> $LOG_FILE
+        python $BENCH_DIR/$APP.py 192.168.100.2 >> $LOG_FILE
     fi
 
     echo ""
@@ -65,7 +55,7 @@ echo -n "docker," >> $LOG_FILE
 run_docker
 
 echo "Building lupine"
-python $SCRIPT_DIR/build/build_manifest.py $DOCKER_IM $DOCKER_TAG --output $APP --cmd=-u,root > /dev/null 2>&1
+python $SCRIPT_DIR/build/build_manifest.py $DOCKER_IM $DOCKER_TAG --output $APP > /dev/null 2>&1
 python $SCRIPT_DIR/build/build_image.py manifestout/$APP.json > /dev/null 2>&1
 
 echo "Benching unoptimised lupine"
