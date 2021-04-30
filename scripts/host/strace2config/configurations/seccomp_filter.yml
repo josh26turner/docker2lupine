@@ -1,0 +1,9 @@
+catalyst:
+  sys_args:
+  - call: prctl
+    arg_pos: 1
+    arg_vals:
+    - SECCOMP_MODE_FILTER
+product:
+  kernel:
+  - CONFIG_SECCOMP_FILTER

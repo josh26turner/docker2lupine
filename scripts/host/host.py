@@ -69,7 +69,6 @@ if __name__ == "__main__":
 
     os.system('{}/net_setup.sh nat'.format(HOST_DIR))
 
-    print('Starting server')
     lupine_server = LupineServer()
     lupine_server.start_server(ip_addr=args.ip, port=args.port)
 

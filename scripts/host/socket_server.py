@@ -20,7 +20,6 @@ class SocketServer():
 
 
     def serve_forever(self):
-        print('Serving')
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sockfd:
             sockfd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             sockfd.bind((self.ip_addr, self.port))

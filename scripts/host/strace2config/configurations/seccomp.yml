@@ -1,6 +1,12 @@
 catalyst:
   syscalls:
   - seccomp
+  sys_args:
+  - call: prctl
+    arg_pos: 0
+    arg_vals:
+    - PR_SET_SECCOMP
+    - PR_GET_SECCOMP
 product:
   kernel:
   - CONFIG_SECCOMP
