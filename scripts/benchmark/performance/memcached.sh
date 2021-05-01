@@ -8,10 +8,6 @@ LOG_FILE=benchlogs/$APP-higher.csv
 SCRIPT_DIR=$(dirname $0)/../..
 BENCH_DIR=$(dirname $0)
 
-stat() {
-    awk '{x+=$0;y+=$0^2}END{print x/NR","sqrt(y/NR-(x/NR)^2)}'
-}
-
 run_bench() {
     for i in `seq $itr`; do
         memtier_benchmark --protocol=memcache_text --server=$1 --port=11211 -t 1 2>/dev/null | grep Totals | sed 's/  */ /g' | cut -d' ' -f2

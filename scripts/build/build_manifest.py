@@ -45,7 +45,7 @@ def dump_fs(image_name, skip_fs_dump, output) -> str:
     return tar
 
 
-def build_manifest(docker_obj, skip_fs_dump, kml, output, envs, cmd) -> Manifest:
+def build_manifest(docker_obj, skip_fs_dump, kml, output, envs, cmd, init) -> Manifest:
     manifest = Manifest()
 
     manifest.runtime.entry = (docker_obj['Config']['Entrypoint'] or []) + (docker_obj['Config']['Cmd'] or []) + cmd
@@ -53,6 +53,9 @@ def build_manifest(docker_obj, skip_fs_dump, kml, output, envs, cmd) -> Manifest
     manifest.runtime.working_directory = docker_obj['Config']['WorkingDir']
 
     manifest.linux_configuration.options, manifest.runtime.enabled_init_options = get_linux_options()
+    if init is not None:
+        manifest.runtime.enabled_init_options = init
+    
     manifest.linux_configuration.kml = kml
 
     manifest.filesystem = dump_fs(docker_obj['RepoTags'][0], skip_fs_dump, output)
@@ -72,6 +75,7 @@ if __name__ == '__main__':
     parser.add_argument('--no_kml', action='store_true', help='disable KML in the Lupine image')
     parser.add_argument('--envs', default=[], nargs='+', help='environment variables to add to the manifest')
     parser.add_argument('--cmd', help='comma seperated list of args to append to the command')
+    parser.add_argument('--init', default=None, nargs='+', help='init options to enable')
 
     args = parser.parse_args()
 
@@ -81,7 +85,7 @@ if __name__ == '__main__':
     output = manifest_out + (args.output or (args.docker_image.replace('/', '-') + '-' + args.docker_tag))
 
     docker_obj = inspect_docker_image(args.docker_image + ':' + args.docker_tag)
-    manifest = build_manifest(docker_obj, args.skip_fs_dump, not args.no_kml, output, args.envs, args.cmd.split(',') if args.cmd else [])
+    manifest = build_manifest(docker_obj, args.skip_fs_dump, not args.no_kml, output, args.envs, args.cmd.split(',') if args.cmd else [], args.init)
 
     with open(output + '.json', 'w') as out_file:
         json.dump(manifest, out_file, default=lambda o: o.__dict__, indent=4,)

@@ -100,7 +100,7 @@ def parse_files(strace_file_names: list[str]) -> list[SysCall]:
         with open(strace_file_name, 'r') as strace_file:
             lines.extend(strace_file.readlines())
 
-    return list(filter(lambda x: x is not None, map(parse_line, lines)))
+    return list(filter(lambda x: x is not None, map(parse_line, list(set(lines)))))
 
 
 def get_files(syscalls: list[SysCall]) -> list[str]:
