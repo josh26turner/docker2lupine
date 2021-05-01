@@ -1,0 +1,7 @@
+catalyst:
+  syscalls:
+  - open_by_handle_at
+  - name_to_handle_at
+product:
+  kernel:
+  - CONFIG_FHANDLE

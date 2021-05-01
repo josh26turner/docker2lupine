@@ -1,0 +1,9 @@
+catalyst:
+  syscalls:
+  - shmat
+  - shmget
+  - shmdt
+  - shmctl
+product:
+  kernel:
+  - CONFIG_SHMEM

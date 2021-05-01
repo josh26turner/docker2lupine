@@ -1,0 +1,7 @@
+catalyst:
+  syscalls:
+  - fanotify_init
+  - fanotify_mark
+product:
+  kernel:
+  - CONFIG_FANOTIFY

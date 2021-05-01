@@ -1,0 +1,7 @@
+catalyst:
+  syscalls:
+  - bpf
+product:
+  kernel:
+  - CONFIG_BPF
+  - CONFIG_BPF_SYSCALL

@@ -1,0 +1,7 @@
+catalyst:
+  syscalls:
+  - quotactl
+product:
+  kernel:
+  - CONFIG_QUOTA
+  - CONFIG_QUOTACTL

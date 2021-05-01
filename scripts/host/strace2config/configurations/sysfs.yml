@@ -1,0 +1,8 @@
+catalyst:
+  files:
+  - /sys/*
+product:
+  kernel:
+  - CONFIG_SYSFS
+  init:
+  - SYS_FS

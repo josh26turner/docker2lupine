@@ -14,7 +14,7 @@ run_docker() {
 
     sleep 5
 
-    python $BENCH_DIR/$APP.py $CONTAINER_IP >> $LOG_FILE
+    python $BENCH_DIR/maria.py $CONTAINER_IP >> $LOG_FILE
 
     docker stop $CONTAINER_ID > /dev/null
 }
@@ -27,9 +27,9 @@ run_lupine_tests() {
     done
 
     if [ "opt" = "$1" ]; then
-        python $BENCH_DIR/$APP.py 192.168.100.2 1
+        python $BENCH_DIR/maria.py 192.168.100.2 1
     else
-        python $BENCH_DIR/$APP.py 192.168.100.2 >> $LOG_FILE
+        python $BENCH_DIR/maria.py 192.168.100.2 >> $LOG_FILE
     fi
 
     echo ""

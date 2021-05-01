@@ -1,0 +1,6 @@
+catalyst:
+  files:
+  - /dev/cpu/*/msr
+product:
+  kernel:
+  - CONFIG_X86_MSR

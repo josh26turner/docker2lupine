@@ -1,0 +1,6 @@
+catalyst:
+  files:
+  - /dev/cpu/*/cpuid
+product:
+  kernel:
+  - CONFIG_X86_CPUID

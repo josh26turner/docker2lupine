@@ -1,6 +1,8 @@
 import json
 import fnmatch
 
+from collections.abc import Iterable
+
 from strace2config.parser import parse_files, get_files, get_syscall_names, get_socket_types
 from strace2config.load_options import get_options, get_all_options, Config
 
@@ -46,13 +48,16 @@ def get_min_config(strace_files: list[str]) -> (list[str], list[str]):
         for opt in options:
             if opt.catalyst.sys_args is not None:
                 for arg in opt.catalyst.sys_args:
-                    if arg.call == call.name and len(call.args) > arg.arg_pos and call.args[arg.arg_pos] in arg.arg_vals:
-                        if opt.product.kernel is not None:
-                            enabled_kernel_configs.update(opt.product.kernel)
-                        if opt.product.init is not None:
-                            enabled_init_configs.update(opt.product.init)
+                    if arg.call == call.name and len(call.args) > arg.arg_pos:
+                        for arg_val in arg.arg_vals:
+                            if arg_val == call.args[arg.arg_pos] or \
+                                    (isinstance(call.args, Iterable) and arg_val in call.args[arg.arg_pos]):
+                                if opt.product.kernel is not None:
+                                    enabled_kernel_configs.update(opt.product.kernel)
+                                if opt.product.init is not None:
+                                    enabled_init_configs.update(opt.product.init)
 
-                        options.remove(opt)
+                                options.remove(opt)
 
     return (sorted(enabled_init_configs), sorted(enabled_kernel_configs))
 

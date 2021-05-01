@@ -1,0 +1,6 @@
+catalyst:
+  syscalls:
+  - sgetmask
+product:
+  kernel:
+  - CONFIG_SGETMASK_SYSCALL

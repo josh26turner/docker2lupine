@@ -39,10 +39,6 @@ void file_write(char *file_name, char *data)
 int main(int argc, char *argv[])
 {
     int strace = argc >= 2 && strcmp("strace", argv[1]) == 0;
-    #ifdef PROC_FS
-    puts("Mounting procfs");
-    mount("proc", "/proc", "proc", 0, NULL);
-    #endif
 
     #ifdef NET_SETUP
     puts("Network setup");
@@ -64,9 +60,19 @@ int main(int argc, char *argv[])
     reseed();
     #endif
 
+    #ifdef PROC_FS
+    puts("Mounting procfs");
+    mount("proc", "/proc", "proc", 0, NULL);
+    #endif
+
     #ifdef TMP_FS
     puts("Mounting tmpfs");
     mount("tmp", "/tmp", "tmpfs", 0, NULL);
+    #endif
+
+    #ifdef SYS_FS
+    puts("Mounting sysfs");
+    mount("sys", "/sys", "sysfs", 0, NULL);
     #endif
 
     file_write("/etc/hostname", NAME "\n");

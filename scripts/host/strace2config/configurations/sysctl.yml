@@ -1,0 +1,7 @@
+catalyst:
+  syscalls:
+  - sysctl
+product:
+  kernel:
+  - CONFIG_SYSCTL
+  - CONFIG_SYSCTL_SYSCALL

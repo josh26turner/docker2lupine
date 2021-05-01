@@ -1,0 +1,21 @@
+catalyst:
+  syscalls:
+  - setns
+  sys_args:
+  - call: clone
+    arg_pos: 2
+    arg_vals:
+    - CLONE_INTO_CGROUP
+    - CLONE_NEWCGROUP
+    - CLONE_NEWIPC
+  - call: ushare
+    arg_pos: 0
+    arg_vals:
+    - CLONE_NEWCGROUP
+    - CLONE_NEWIPC
+product:
+  kernel:
+  - CONFIG_NAMESPACES
+  - CONFIG_IPC_NS
+  - CONFIG_CGROUPS
+  - CONFIG_MEMCG

@@ -1,0 +1,6 @@
+catalyst:
+  syscalls:
+  - sysfs
+product:
+  kernel:
+  - CONFIG_SYSFS_SYSCALL

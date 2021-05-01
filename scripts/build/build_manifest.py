@@ -14,14 +14,26 @@ def inspect_docker_image(docker_image):
     return json.loads(docker_json)[0]
 
 
-def get_linux_options(app_conf_file_name):
-    conf_file_name = app_conf_file_name or 'configs/general.config'
-    with open(conf_file_name, 'r') as conf_file:
-        confs = []
-        for line in conf_file.readlines():
-            if len(line) > 1:
-                confs.append(line.replace('=y', '').replace('\n', ''))
-        return confs
+def import_module_by_path(path):
+    name = os.path.splitext(os.path.basename(path))[0]
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def get_linux_options():
+    load_options = import_module_by_path('scripts/host/strace2config/load_options.py')
+    options = load_options.get_all_options()
+    linux_conf = []
+    init_conf = []
+    
+    for option in options:
+        linux_conf += option.product.kernel or []
+        init_conf += option.product.init or []
+
+    return sorted(linux_conf), sorted(init_conf)
 
 
 def dump_fs(image_name, skip_fs_dump, output) -> str:
@@ -33,17 +45,15 @@ def dump_fs(image_name, skip_fs_dump, output) -> str:
     return tar
 
 
-def build_manifest(docker_obj, app_conf_file_name, skip_fs_dump, kml, output, envs, cmd) -> Manifest:
+def build_manifest(docker_obj, skip_fs_dump, kml, output, envs, cmd) -> Manifest:
     manifest = Manifest()
 
     manifest.runtime.entry = (docker_obj['Config']['Entrypoint'] or []) + (docker_obj['Config']['Cmd'] or []) + cmd
     manifest.runtime.envs = docker_obj['Config']['Env'] + envs
     manifest.runtime.working_directory = docker_obj['Config']['WorkingDir']
 
-    manifest.runtime.enabled_init_options = ['PROC_FS', 'NET_SETUP', 'ENTROPY_GEN', 'TMP_FS']
-
+    manifest.linux_configuration.options, manifest.runtime.enabled_init_options = get_linux_options()
     manifest.linux_configuration.kml = kml
-    manifest.linux_configuration.options = get_linux_options(app_conf_file_name)
 
     manifest.filesystem = dump_fs(docker_obj['RepoTags'][0], skip_fs_dump, output)
 
@@ -60,7 +70,6 @@ if __name__ == '__main__':
     parser.add_argument('--output')
     parser.add_argument('--skip_fs_dump', action='store_true', help='just remake the manifest')
     parser.add_argument('--no_kml', action='store_true', help='disable KML in the Lupine image')
-    parser.add_argument('--app_conf', help='path to app config file')
     parser.add_argument('--envs', default=[], nargs='+', help='environment variables to add to the manifest')
     parser.add_argument('--cmd', help='comma seperated list of args to append to the command')
 
@@ -72,7 +81,7 @@ if __name__ == '__main__':
     output = manifest_out + (args.output or (args.docker_image.replace('/', '-') + '-' + args.docker_tag))
 
     docker_obj = inspect_docker_image(args.docker_image + ':' + args.docker_tag)
-    manifest = build_manifest(docker_obj, args.app_conf, args.skip_fs_dump, not args.no_kml, output, args.envs, args.cmd.split(',') if args.cmd else [])
+    manifest = build_manifest(docker_obj, args.skip_fs_dump, not args.no_kml, output, args.envs, args.cmd.split(',') if args.cmd else [])
 
     with open(output + '.json', 'w') as out_file:
         json.dump(manifest, out_file, default=lambda o: o.__dict__, indent=4,)
