@@ -1,58 +1,79 @@
 #/bin/bash -e
+itr=20
 
-SCRIPT_DIR=$(dirname $0)/
-
-APP_NAME='redis-lupine'
-DOCKER_IM=$(sed 's/-/:/g' <<< $APP_NAME)
-echo $APP_NAME
-
-LOG_DIR='benchlogs/'
-mkdir -p $LOG_DIR
+APP=redis
+DOCKER_IM=redis
+DOCKER_TAG=lupine
+LOG_FILE=benchlogs/$APP-higher.csv
+SCRIPT_DIR=$(dirname $0)/../..
+BENCH_DIR=$(dirname $0)
 
 run_bench() {
-    HOST=$1
-    IP=$2
-
-    redis-benchmark --csv -h $IP -t get,set > $LOG_DIR$APP_NAME-$HOST.log 2>&1
+    for i in `seq $itr`; do
+        redis-benchmark --csv -h $1 -t get,set | grep "SET\|GET" | cut -d',' -f2 | sed 's/"//g'
+    done | python $SCRIPT_DIR/benchmark/stat.py >> $LOG_FILE
 }
 
-run_lupine() {
-    python $SCRIPT_DIR/host/host.py $APP_NAME
+run_docker() {
+    CONTAINER_ID=$(docker run --cpus 1 --rm -d $DOCKER_IM:$DOCKER_TAG)
+    CONTAINER_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_ID)
 
-    while ! grep -q "APP START" firecrackerout/$APP_NAME.log; do
+    sleep 5
+
+    run_bench $CONTAINER_IP
+
+    docker stop $CONTAINER_ID > /dev/null
+}
+
+run_lupine_tests() {
+    sleep 2
+
+    while ! grep 'Ready to accept connections' firecrackerout/$APP.log > /dev/null 2>&1; do
         sleep 1
     done
 
     sleep 2
 
-    run_bench lupine 192.168.100.2
+    if [ "opt" = "$1" ]; then
+        redis-benchmark --csv -h $1 -t get,set >/dev/null 2>&1
+    else
+        run_bench 192.168.100.2 >> $LOG_FILE
+    fi
 
-    sudo kill -KILL `pgrep -x firecracker`
+    echo ""
 }
 
-run_docker() {
-    CONTAINER_ID=$(docker run --rm -d $DOCKER_IM)
-
-    CONTAINER_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_ID)
-
-    sleep 2
-
-    run_bench docker $CONTAINER_IP
-
-    docker stop $CONTAINER_ID
+wait_for_lupine_stop() {
+    while ! grep 'stopVMM' firecrackerout/$APP.log > /dev/null 2>&1; do
+        sleep 1
+    done
 }
 
+run_lupine() {
+    run_lupine_tests $1 | python $SCRIPT_DIR/host/host.py $APP $2 > /dev/null 2>&1
+    wait_for_lupine_stop
+}
 
-if [ ! -f kernelbuild/$APP_NAME ]; then
-    pushd docker
-    docker build . -t redis:lupine -f redis.Dockerfile
-    popd
+echo "platform,mean,std" > $LOG_FILE
 
-    python $SCRIPT_DIR/build/build_manifest.py redis lupine --app_conf configs/apps/redis.config
-    python $SCRIPT_DIR/build/build_image.py manifestout/$APP_NAME.json > /dev/null 2>&1
-else
-    python $SCRIPT_DIR/build/build_image.py manifestout/$APP_NAME.json --filesystem > /dev/null 2>&1
-fi
-
-run_lupine
+echo "Benching docker"
+echo -n "docker," >> $LOG_FILE
 run_docker
+
+echo "Building lupine"
+python $SCRIPT_DIR/build/build_manifest.py $DOCKER_IM $DOCKER_TAG --output $APP > /dev/null 2>&1
+python $SCRIPT_DIR/build/build_image.py manifestout/$APP.json > /dev/null 2>&1
+
+echo "Benching unoptimised lupine"
+echo -n "lupine-unopt," >> $LOG_FILE
+run_lupine
+
+echo "Optimising lupine"
+python $SCRIPT_DIR/build/build_image.py manifestout/$APP.json --filesystem > /dev/null 2>&1
+run_lupine opt --strace
+echo "Rebuilding lupine"
+python $SCRIPT_DIR/build/build_image.py manifestout/$APP.json > /dev/null 2>&1
+
+echo "Benching optimised lupine"
+echo -n "lupine-opt," >> $LOG_FILE
+run_lupine

@@ -35,7 +35,7 @@ run_lupine_tests() {
     sleep 2
 
     if [ "opt" = "$1" ]; then
-        memtier_benchmark --protocol=memcache_text --server=192.168.100.2 --port=11211 -t 1 2>/dev/null
+        memtier_benchmark --protocol=memcache_text --server=192.168.100.2 --port=11211 -t 1 >/dev/null 2>&1
     else
         run_bench 192.168.100.2 >> $LOG_FILE
     fi

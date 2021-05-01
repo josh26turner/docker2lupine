@@ -85,6 +85,9 @@ def parse_line(strace_line: str) -> SysCall or None:
         return SysCall(call, args, res, res_str, data)
 
     except ValueError:
+        if call == 'futex': #futex may die while waiting, still should be added
+            return SysCall(call, [], 0, '', '')
+
         return None
 
 
