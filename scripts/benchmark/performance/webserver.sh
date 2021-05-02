@@ -4,7 +4,7 @@ itr=1000
 APP=nginx
 DOCKER_IM=nginx
 DOCKER_TAG=alpine
-LOG_FILE=benchlogs/$APP-higher.csv
+LOG_FILE=benchlogs/performance/$APP-higher.csv
 SCRIPT_DIR=$(dirname $0)/../..
 BENCH_DIR=$(dirname $0)
 

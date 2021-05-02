@@ -4,7 +4,7 @@ itr=20
 APP=python
 DOCKER_IM=python
 DOCKER_TAG=bench
-LOG_FILE=benchlogs/$APP-lower.csv
+LOG_FILE=benchlogs/performance/$APP-lower.csv
 SCRIPT_DIR=$(dirname $0)/../..
 BENCH_DIR=$(dirname $0)
 

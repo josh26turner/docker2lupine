@@ -4,14 +4,10 @@ itr=1000
 APP=postgres
 DOCKER_IM=postgres
 DOCKER_TAG=alpine
-LOG_FILE=benchlogs/$APP-higher.csv
+LOG_FILE=benchlogs/performance/$APP-higher.csv
 SCRIPT_DIR=$(dirname $0)/../..
 BENCH_DIR=$(dirname $0)
 POST_PASS=pass
-
-stat() {
-    awk '{x+=$0;y+=$0^2}END{print x/NR","sqrt(y/NR-(x/NR)^2)}'
-}
 
 run_bench() {
     PGPASSWORD=pass pgbench -i -U postgres -h $1 > /dev/null 2>&1
@@ -42,7 +38,7 @@ run_lupine_tests() {
     sleep 2
 
     if [ "opt" = "$1" ]; then
-        PGPASSWORD=pass pgbench -i -U postgres -h 192.168.100.2 > /dev/null 2>&1
+        PGPASSWORD=$POST_PASS pgbench -i -U postgres -h 192.168.100.2 > /dev/null 2>&1
     else
         run_bench 192.168.100.2
     fi

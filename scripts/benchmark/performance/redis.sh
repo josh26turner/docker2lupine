@@ -4,7 +4,7 @@ itr=20
 APP=redis
 DOCKER_IM=redis
 DOCKER_TAG=lupine
-LOG_FILE=benchlogs/$APP-higher.csv
+LOG_FILE=benchlogs/performance/$APP-higher.csv
 SCRIPT_DIR=$(dirname $0)/../..
 BENCH_DIR=$(dirname $0)
 
@@ -35,7 +35,7 @@ run_lupine_tests() {
     sleep 2
 
     if [ "opt" = "$1" ]; then
-        redis-benchmark --csv -h $1 -t get,set >/dev/null 2>&1
+        redis-benchmark --csv -h 192.168.100.2 -t get,set >/dev/null 2>&1
     else
         run_bench 192.168.100.2 >> $LOG_FILE
     fi

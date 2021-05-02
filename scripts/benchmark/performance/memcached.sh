@@ -4,7 +4,7 @@ itr=10
 APP=memcached
 DOCKER_IM=memcached
 DOCKER_TAG=alpine
-LOG_FILE=benchlogs/$APP-higher.csv
+LOG_FILE=benchlogs/performance/$APP-higher.csv
 SCRIPT_DIR=$(dirname $0)/../..
 BENCH_DIR=$(dirname $0)
 

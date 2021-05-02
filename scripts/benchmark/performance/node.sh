@@ -4,7 +4,7 @@ itr=2
 APP=node
 DOCKER_IM=node
 DOCKER_TAG=bench
-LOG_FILE=benchlogs/$APP-lower.csv
+LOG_FILE=benchlogs/performance/$APP-lower.csv
 SCRIPT_DIR=$(dirname $0)/../..
 BENCH_DIR=$(dirname $0)
 
