@@ -1,5 +1,5 @@
 #!/bin/bash -e
-itr=1000
+itr=8000
 
 APP=postgres
 DOCKER_IM=postgres

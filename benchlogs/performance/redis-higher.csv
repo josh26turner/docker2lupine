@@ -1,0 +1,4 @@
+platform,mean,std
+docker,102826.0564,3904.6948
+lupine-unopt,99299.2094,10300.1474
+lupine-opt,99658.7033,10271.2963

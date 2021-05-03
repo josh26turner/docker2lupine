@@ -1,5 +1,5 @@
 #!/bin/bash -e
-itr=5
+itr=50
 
 APP=mariadb
 DOCKER_IM=yobasystems/alpine-mariadb

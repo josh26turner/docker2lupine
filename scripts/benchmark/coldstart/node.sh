@@ -8,7 +8,7 @@ LOG_FILE=benchlogs/coldstart/$APP.csv
 SCRIPT_DIR=$(dirname $0)/../..
 BENCH_DIR=$(dirname $0)
 PORT=3000
-INIT_DONE'=========APP INIT========='
+INIT_DONE='=========APP INIT========='
 
 run_lupine() {
     for i in `seq $itr`; do

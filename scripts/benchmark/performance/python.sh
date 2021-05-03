@@ -1,5 +1,5 @@
 #!/bin/bash -e
-itr=20
+itr=30
 
 APP=python
 DOCKER_IM=python

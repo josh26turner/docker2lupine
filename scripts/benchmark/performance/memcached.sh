@@ -1,5 +1,5 @@
 #!/bin/bash -e
-itr=10
+itr=50
 
 APP=memcached
 DOCKER_IM=memcached

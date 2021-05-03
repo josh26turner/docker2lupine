@@ -1,5 +1,5 @@
 #!/bin/bash -e
-itr=2
+itr=100
 
 APP=node
 DOCKER_IM=node

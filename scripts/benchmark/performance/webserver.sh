@@ -1,5 +1,5 @@
 #!/bin/bash -e
-itr=1000
+itr=10000
 
 APP=nginx
 DOCKER_IM=nginx

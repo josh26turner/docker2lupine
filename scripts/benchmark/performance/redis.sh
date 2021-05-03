@@ -1,5 +1,5 @@
 #/bin/bash -e
-itr=20
+itr=100
 
 APP=redis
 DOCKER_IM=redis

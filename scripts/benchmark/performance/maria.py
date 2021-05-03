@@ -33,7 +33,7 @@ if __name__ == "__main__":
     parser = ArgumentParser(epilog='Run from Lupine root directory')
 
     parser.add_argument('ip_address', help='MariaDB IP address')
-    parser.add_argument('itr', default=20, type=int, help='number of iterations', nargs='?')
+    parser.add_argument('itr', default=50, type=int, help='number of iterations', nargs='?')
 
     args = parser.parse_args()
     res = run_bench(args.ip_address, itr=args.itr)

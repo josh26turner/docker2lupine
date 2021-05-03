@@ -46,11 +46,11 @@ run_lupine() {
     wait_for_lupine_stop
 }
 
-# echo "platform,mean,std" > $LOG_FILE
+echo "platform,mean,std" > $LOG_FILE
 
-# echo "Benching docker"
-# echo -n "docker," >> $LOG_FILE
-# run_docker
+echo "Benching docker"
+echo -n "docker," >> $LOG_FILE
+run_docker
 
 echo "Building lupine"
 python $SCRIPT_DIR/build/build_manifest.py $DOCKER_IM $DOCKER_TAG --no_kml --output $APP --envs MYSQL_ROOT_PASSWORD=$MARIA_PASS > /dev/null 2>&1
