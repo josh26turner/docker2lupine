@@ -49,6 +49,8 @@ run_lupine
 echo "Optimising lupine"
 python $SCRIPT_DIR/build/build_image.py manifestout/$APP.json --filesystem > /dev/null 2>&1
 python $SCRIPT_DIR/host/host.py $APP --strace --no_net > /dev/null 2>&1
+echo "Rebuilding lupine"
+python $SCRIPT_DIR/build/build_image.py manifestout/$APP.json > /dev/null 2>&1
 
 echo "Benching optimised lupine"
 echo -n "lupine-opt," >> $LOG_FILE

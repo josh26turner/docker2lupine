@@ -101,8 +101,10 @@ int main(int argc, char *argv[])
         DIR *dir_ptr = opendir("/");
         struct dirent *ent_ptr;
 
-        while (ent_ptr = readdir(dir_ptr)) {
-            if (strncmp(ent_ptr->d_name, NAME ".", strlen(NAME ".")) == 0){
+        while (ent_ptr = readdir(dir_ptr))
+        {
+            if (strncmp(ent_ptr->d_name, NAME ".", strlen(NAME ".")) == 0)
+            {
                 printf("    %s\n", ent_ptr->d_name);
                 sendfile(ent_ptr->d_name);
             }
