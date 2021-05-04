@@ -4,4 +4,3 @@
 [submodule "musl"]
 	path = musl
 	url = git://git.musl-libc.org/musl
-	branch = v1.1.23-95-g6ad514e4

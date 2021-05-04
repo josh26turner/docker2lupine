@@ -6,11 +6,8 @@ import tempfile
 from shutil import copyfile
 from manifest import Manifest, Runtime, LinuxConf
 
-#TODO: musl libc setup
-#TODO: direct init insert w/o recreating whole rootfs
 
-
-GUEST_DIR=os.path.dirname(os.path.abspath(__file__))+'/../guest/'
+GUEST_DIR=os.path.dirname(os.path.abspath(__file__))+'/../guest'
 
 def read_manifest(file_name: str) -> Manifest:
     try:
@@ -47,6 +44,10 @@ def build_linux(linux_config: LinuxConf, app_name: str) -> None:
     print('Building kernel')
 
     os.system('yes no | make -C ' + linux_dir + ' oldconfig')
+
+    if os.system('docker images | grep \'linuxbuild *latest\' > /dev/null'): #Returns 1 if docker image does not exist
+        os.system('make build-env-image')
+
     os.system('make build-linux')
     copyfile(linux_dir + 'vmlinux', build_dir + app_name)
 
@@ -108,6 +109,11 @@ def build_fs(fs_path: str, app_name: str) -> None:
                 fs=target_dir))
 
         os.system('sudo ln -s /proc/self/fd {target}/dev/fd'.format(target=target_dir))
+
+        if not os.path.isfile('{guest_dir}/libc.so'.format(guest_dir=GUEST_DIR)):
+            if not os.path.isfile('musl/musl-kml/lib/libc.so'):
+                os.system('make musl-kml')
+            os.system('cp musl/musl-kml/lib/libc.so {guest_dir}'.format(guest_dir=GUEST_DIR))
         
         os.system('sudo cp -r {guest_dir}/* {target}'.format(target=target_dir, guest_dir=GUEST_DIR))
         os.system('sudo cp {guest_dir}/libc.so {target}/lib/ld-musl-x86_64.so.1'.format(target=target_dir, guest_dir=GUEST_DIR))

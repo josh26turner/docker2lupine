@@ -48,7 +48,6 @@ void reseed(void) {
     while (pos <= len - 2) {
         __builtin_ia32_rdrand64_step((unsigned long long*)&num_buf);
 
-
         info->buf[pos] = num_buf[1];
         info->buf[pos+1] = num_buf[0];
 

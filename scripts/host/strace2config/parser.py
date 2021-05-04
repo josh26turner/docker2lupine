@@ -112,7 +112,3 @@ def get_files(syscalls: list[SysCall]) -> list[str]:
 
 def get_syscall_names(syscalls: list[SysCall]) -> list[str]:
     return sorted(set(map(lambda x: x.name, syscalls)))
-
-
-def get_socket_types(syscalls: list[SysCall]) -> list[str]:
-    return sorted(set(x.args[0] for x in filter(lambda x: x.name == 'socket', syscalls)))

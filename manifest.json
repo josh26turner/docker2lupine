@@ -12,7 +12,7 @@
     "runtime" : {
         "entry" : [
             "/path/to/startup/command",
-            "args1",
+            "arg1",
             "arg2"
         ],
         "envs" : [

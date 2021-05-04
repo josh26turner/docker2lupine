@@ -1,4 +1,3 @@
-
 build-env-image:
 	cd docker && \
 		docker build . -t linuxbuild:latest -f build-env.Dockerfile
@@ -15,7 +14,7 @@ unpatch-linux:
 
 patch-musl:
 	pushd musl && \
-	git apply ../musl_kml_from_6ad514e.patch | exit 0 && \
+	git apply ../musl_kml.patch | exit 0 && \
 	popd
 
 unpatch-musl:
@@ -33,3 +32,12 @@ musl-kml: patch-musl
 build-linux:
 	docker run -it -v "$(PWD)/linux":/linux-volume --rm linuxbuild:latest	\
 		bash -c "make -j8 -C /linux-volume"
+
+clean:
+	rm -rf straceout/* firecrackerout/* init/build/* kernelbuild/* rootfsbuild/* manifestout/*
+
+benchmark-docker:
+	cd docker && \
+	docker build . -t redis:lupine -f redis.Dockerfile && \
+	docker build . -t node:bench -f node.Dockerfile && \
+	docker build . -t python:bench -f python.Dockerfile

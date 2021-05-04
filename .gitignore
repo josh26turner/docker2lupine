@@ -8,3 +8,4 @@ manifestout/
 firecrackerout/
 straceout/
 __pycache__
+scripts/guest/libc.so
