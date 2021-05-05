@@ -3,7 +3,7 @@ import fnmatch
 
 from collections.abc import Iterable
 
-from strace2config.parser import parse_files, get_files, get_syscall_names, get_socket_types
+from strace2config.parser import parse_files, get_files, get_syscall_names
 from strace2config.load_options import get_options, get_all_options, Config
 
 
