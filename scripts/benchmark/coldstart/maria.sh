@@ -28,8 +28,6 @@ run_lupine() {
         sudo kill -KILL `pgrep -x firecracker`
 
         wait_for_lupine_stop
-
-        sleep 1
     done | python $SCRIPT_DIR/benchmark/stat.py >> $LOG_FILE
 }
 
@@ -67,7 +65,7 @@ opt_lupine_test() {
 }
 
 wait_for_lupine_stop() {
-    while ! grep 'stopVMM' firecrackerout/$APP.log > /dev/null 2>&1; do
+    while pgrep firecracker > /dev/null 2>&1; do
         sleep 1
     done
 }

@@ -42,11 +42,8 @@ int main(int argc, char *argv[])
 
     #ifdef NET_SETUP
     puts("Network setup");
-    system("/busybox-x86_64 ip addr add 192.168.100.2/24 dev eth0");
     system("/busybox-x86_64 ip addr add 127.0.0.1/24 dev lo");
-    system("/busybox-x86_64 ip link set eth0 up");
     system("/busybox-x86_64 ip link set lo up");
-    system("/busybox-x86_64 ip route add default via 192.168.100.1 dev eth0");
 
     file_write("/etc/hosts", "127.0.0.1       localhost\n");
     file_write("/etc/resolv.conf", "nameserver 192.168.100.1\n");

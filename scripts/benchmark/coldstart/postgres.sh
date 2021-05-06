@@ -17,6 +17,10 @@ run_lupine() {
         start=`date +%s.%N`
 
         python $SCRIPT_DIR/host/host.py $APP > /dev/null 2>&1 &
+
+	while ! grep "shutdown" firecrackerout/$APP.log > /dev/null; do
+	    :
+	done
         
         while ! timeout 0.01 nc -z 192.168.100.2 $PORT > /dev/null 2>&1; do
             :
@@ -28,8 +32,6 @@ run_lupine() {
         sudo kill -KILL `pgrep -x firecracker`
 
         wait_for_lupine_stop
-
-        sleep 1
     done | python $SCRIPT_DIR/benchmark/stat.py >> $LOG_FILE
 }
 
@@ -53,8 +55,6 @@ run_docker() {
 }
 
 opt_lupine_test() {
-    sleep 2
-
     while ! grep "$INIT_DONE" firecrackerout/$APP.log > /dev/null 2>&1; do
         sleep 1
     done
@@ -67,22 +67,23 @@ opt_lupine_test() {
 }
 
 wait_for_lupine_stop() {
-    while ! grep 'stopVMM' firecrackerout/$APP.log > /dev/null 2>&1; do
+    while pgrep firecracker > /dev/null 2>&1; do
         sleep 1
     done
 }
 
 
 opt_lupine() {
+    echo > firecrackerout/$APP.log
     opt_lupine_test | python $SCRIPT_DIR/host/host.py $APP --strace > /dev/null 2>&1
     wait_for_lupine_stop
 }
 
-echo "platform,mean,std" > $LOG_FILE
+#echo "platform,mean,std" > $LOG_FILE
 
-echo "Benching docker"
-echo -n "docker," >> $LOG_FILE
-run_docker
+#echo "Benching docker"
+#echo -n "docker," >> $LOG_FILE
+#run_docker
 
 echo "Building lupine"
 python $SCRIPT_DIR/build/build_manifest.py $DOCKER_IM $DOCKER_TAG --output $APP --envs POSTGRES_PASSWORD=$POST_PASS > /dev/null 2>&1

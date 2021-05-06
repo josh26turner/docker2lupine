@@ -17,18 +17,21 @@
 /* Get the entropy count. */
 #define RNDGETENTCNT	_IOR( 'R', 0x00, int )
 
-void exit_perror(const char *msg) {
+void exit_perror(const char *msg)
+{
     perror(msg);
     exit(EXIT_FAILURE);
 }
 
-struct rand_pool_info {
+struct rand_pool_info
+{
     int	entropy_count;
 	int	buf_size;
 	unsigned int buf[0];
 };
 
-void reseed(void) {
+void reseed(void)
+{
     printf("Reseeding /dev/urandom\n");
 
     size_t len = 1024;
@@ -37,15 +40,13 @@ void reseed(void) {
     info->entropy_count = len * sizeof(unsigned int) * 8;
 
     int fd = open("/dev/urandom", O_RDWR);
-    if (fd < 0) {
-        exit_perror("Unable to open /dev/urandom");
-    }
+    if (fd < 0) exit_perror("Unable to open /dev/urandom");
 
-    // Add the entropy bytes supplied by the user.
+    // Add the entropy bytes supplied by the hwrng
     unsigned int num_buf[2];
-    size_t pos = 0;
-
-    while (pos <= len - 2) {
+    int pos = 0;
+    while (pos <= len - 2)
+    {
         __builtin_ia32_rdrand64_step((unsigned long long*)&num_buf);
 
         info->buf[pos] = num_buf[1];
@@ -54,7 +55,5 @@ void reseed(void) {
         pos += 2;
     }
 
-    if (ioctl(fd, RNDADDENTROPY, info) < 0) {
-        exit_perror("Error issuing RNDADDENTROPY operation");
-    }
+    if (ioctl(fd, RNDADDENTROPY, info) < 0) exit_perror("Error issuing RNDADDENTROPY operation");
 }

@@ -1,4 +1,4 @@
 platform,mean,std
-docker,0.4446,0.0317
-lupine-unopt,1.1925,0.0167
-lupine-opt,1.1868,0.02
+docker,0.4652,0.0291
+lupine-unopt,0.4634,0.0225
+lupine-opt,0.4676,0.0249

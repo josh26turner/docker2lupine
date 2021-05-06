@@ -12,12 +12,11 @@ INIT_DONE='Configuration complete; ready for start up'
 
 run_lupine() {
     for i in `seq $itr`; do
-        python $SCRIPT_DIR/build/build_image.py manifestout/$APP.json --filesystem > /dev/null 2>&1
         start=`date +%s.%N`
 
         python $SCRIPT_DIR/host/host.py $APP > /dev/null 2>&1 &
         
-        while ! timeout 0.01 nc -z 192.168.100.2 $PORT > /dev/null 2>&1; do
+        while ! timeout 0.05 nc -z 192.168.100.2 $PORT > /dev/null 2>&1; do
             :
         done
         end=`date +%s.%N`
@@ -64,7 +63,7 @@ opt_lupine_test() {
 }
 
 wait_for_lupine_stop() {
-    while ! grep 'stopVMM' firecrackerout/$APP.log > /dev/null 2>&1; do
+    while pgrep firecracker > /dev/null 2>&1; do
         sleep 1
     done
 }

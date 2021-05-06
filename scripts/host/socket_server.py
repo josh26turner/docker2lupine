@@ -111,11 +111,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    server = LupineServer()
-    server.start_server(ip_addr=args.ip, port=args.p)
+    lupine_server = LupineServer()
+    lupine_server.start_server(ip_addr=args.ip, port=args.p)
 
-    try:
-        while True:
-            pass
-    except KeyboardInterrupt as e:
-        server.kill_server()
+    input('Press enter when finished')
+    lupine_server.set_done(True)
+    lupine_server.wait_for_finish()

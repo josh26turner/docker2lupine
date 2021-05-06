@@ -17,7 +17,7 @@ run_lupine() {
 
         python $SCRIPT_DIR/host/host.py $APP > /dev/null 2>&1 &
         
-        while ! timeout 0.01 nc -z 192.168.100.2 $PORT > /dev/null 2>&1; do
+        while ! timeout 0.05 nc -z 192.168.100.2 $PORT > /dev/null 2>&1; do
             :
         done
         end=`date +%s.%N`
@@ -27,8 +27,6 @@ run_lupine() {
         sudo kill -KILL `pgrep -x firecracker`
 
         wait_for_lupine_stop
-
-        sleep 1
     done | python $SCRIPT_DIR/benchmark/stat.py >> $LOG_FILE
 }
 
@@ -52,8 +50,6 @@ run_docker() {
 }
 
 opt_lupine_test() {
-    sleep 2
-
     while ! grep "$INIT_DONE" firecrackerout/$APP.log > /dev/null 2>&1; do
         sleep 1
     done
@@ -66,7 +62,7 @@ opt_lupine_test() {
 }
 
 wait_for_lupine_stop() {
-    while ! grep 'stopVMM' firecrackerout/$APP.log > /dev/null 2>&1; do
+    while pgrep firecracker > /dev/null 2>&1; do
         sleep 1
     done
 }

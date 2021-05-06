@@ -42,7 +42,7 @@ if __name__ == "__main__":
         os.mkdir(FIRECRACKER_OUT)
 
     print('Starting lupine in firecracker')
-    os.system('{host_dir}/firecracker-run.sh {lupine} "{init}" &> {out}{lupine}.log &'.format(
+    os.system('sudo {host_dir}/firecracker-run.sh {lupine} "{init}" &> {out}{lupine}.log &'.format(
         lupine=args.lupine,
         out=FIRECRACKER_OUT,
         init='/init strace' if args.strace else '/init',
@@ -62,12 +62,12 @@ if __name__ == "__main__":
 
         exit(0)
     
-    # Wait for host startup, network device creation
-    with open('{out}{lupine}.log'.format(lupine=args.lupine, out=FIRECRACKER_OUT), 'r') as log_file:
-        while 'createNetworkInterface returned' not in log_file.read():
-            pass
+    # # Wait for host startup, network device creation
+    # with open('{out}{lupine}.log'.format(lupine=args.lupine, out=FIRECRACKER_OUT), 'r') as log_file:
+    #     while 'createNetworkInterface returned' not in log_file.read():
+    #         pass
 
-    os.system('{}/net_setup.sh nat'.format(HOST_DIR))
+    # os.system('{}/net_setup.sh nat'.format(HOST_DIR))
 
     lupine_server = LupineServer()
     lupine_server.start_server(ip_addr=args.ip, port=args.port)
