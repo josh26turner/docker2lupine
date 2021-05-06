@@ -26,6 +26,11 @@ def update_config(lupine: str) -> None:
             json.dump(manifest, manifest_file, default=lambda o: o.__dict__, indent=4)
 
 
+def extract_strace(lupine: str) -> None:        
+    os.system('sudo mount rootfsbuild/{lupine}.ext4 /mnt'.format(lupine=args.lupine))
+    os.system('cp /mnt/{lupine}.* straceout'.format(lupine=args.lupine))
+    os.system('sudo umount /mnt')
+
 if __name__ == "__main__":
     from argparse import ArgumentParser
     parser = ArgumentParser(epilog='Run from Lupine root directory')
@@ -61,23 +66,21 @@ if __name__ == "__main__":
             update_config(args.lupine)
 
         exit(0)
-    
-    # # Wait for host startup, network device creation
-    # with open('{out}{lupine}.log'.format(lupine=args.lupine, out=FIRECRACKER_OUT), 'r') as log_file:
-    #     while 'createNetworkInterface returned' not in log_file.read():
-    #         pass
-
-    # os.system('{}/net_setup.sh nat'.format(HOST_DIR))
 
     lupine_server = LupineServer()
     lupine_server.start_server(ip_addr=args.ip, port=args.port)
 
     if args.strace:
         print('Run tests or perform a regular usage of the service...')
+
+    while os.system('pgrep firecracker > /dev/null'):
+        pass
     
     input('Press enter when finished')
     lupine_server.set_done(True)
     lupine_server.wait_for_finish()
+
+    extract_strace(args.lupine)
 
     if args.strace:
         update_config(args.lupine)

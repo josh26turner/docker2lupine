@@ -5,6 +5,8 @@
 #include <string.h>
 #include <sys/ioctl.h>
 
+#include "reseed.h"
+
 /* Clear the entropy pool and associated counters.  (Superuser only.) */
 #define RNDCLEARPOOL	_IO( 'R', 0x06 )
 

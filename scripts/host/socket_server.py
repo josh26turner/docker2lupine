@@ -1,5 +1,3 @@
-import sys
-import os
 import time
 import socket
 
@@ -40,36 +38,6 @@ class SocketServer():
 
                 time.sleep(1)
 
-            print("Getting strace logs...")
-            files = []
-            while True: # recv files
-                conn, addr = sockfd.accept()
-
-                filename = conn.recv(1024).decode('utf-8').split('/')[-1]
-                
-                if filename == 'finish':
-                    break
-                print("    " + filename)
-
-                conn, addr = sockfd.accept()
-
-                length = int(conn.recv(1024))
-
-                conn, addr = sockfd.accept()
-
-                contents = b''
-                while len(contents) < length:
-                    contents += conn.recv(length)
-                conn.sendall(b'done')
-                
-                contents = contents[:length].decode('utf-8')
-
-                files.append((filename, contents))
-
-            for filename, contents in files:
-                with open(STRACE_OUT + filename, 'w') as file:
-                    file.write(contents)
-            
             sockfd.shutdown(socket.SHUT_RDWR)
             sockfd.close()
             self.finished = True
