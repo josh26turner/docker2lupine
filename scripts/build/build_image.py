@@ -115,6 +115,10 @@ def build_fs(fs_path: str, app_name: str) -> None:
                 os.system('make musl-kml')
             os.system('cp musl/musl-kml/lib/libc.so {guest_dir}'.format(guest_dir=GUEST_DIR))
         
+        os.system('echo "127.0.0.1      localhost\n" | sudo tee {target}/etc/hosts > /dev/null'.format(target=target_dir))
+        os.system('echo "nameserver 192.168.100.1\n" | sudo tee {target}/etc/resolv.conf > /dev/null'.format(target=target_dir))
+        os.system('echo "{app_name}" | sudo tee {target}/etc/hostname > /dev/null'.format(target=target_dir, app_name=app_name))
+        
         os.system('sudo cp -r {guest_dir}/* {target}'.format(target=target_dir, guest_dir=GUEST_DIR))
         os.system('sudo cp {guest_dir}/libc.so {target}/lib/ld-musl-x86_64.so.1'.format(target=target_dir, guest_dir=GUEST_DIR))
 

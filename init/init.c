@@ -30,22 +30,12 @@
     }                                                       \
 }
 
-void file_write(char *file_name, char *data)         
-{                                           
-    FILE *file_ptr = fopen(file_name, "w"); 
-    fprintf(file_ptr, data);                
-    fclose(file_ptr);                       
-}
-
 int main(int argc, char *argv[])
 {
     int strace = argc >= 2 && strcmp("strace", argv[1]) == 0;
     puts("Network setup");
     system("/busybox-x86_64 ip addr add 127.0.0.1/24 dev lo");
     system("/busybox-x86_64 ip link set lo up");
-
-    file_write("/etc/hosts", "127.0.0.1       localhost\n");
-    file_write("/etc/resolv.conf", "nameserver 192.168.100.1\n");
 
     #ifdef ENTROPY_GEN
     puts("Generating entropy");
@@ -70,7 +60,6 @@ int main(int argc, char *argv[])
     mount("sys", "/sys", "sysfs", 0, NULL);
     #endif
 
-    file_write("/etc/hostname", NAME "\n");
     chdir(WORKING_DIR);
 
     char *env[] = {ENV_ARR};
@@ -84,10 +73,9 @@ int main(int argc, char *argv[])
 
     if (sockfd == -1) goto INIT_REBOOT;
 
-    close(sockfd);
-
     while (get_rsp(sockfd) != 1) sleep(1);
 
+    close(sockfd);
 INIT_REBOOT:
     puts("=========FINISHED=========");
     sync();
