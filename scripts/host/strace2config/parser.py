@@ -1,3 +1,5 @@
+import re
+
 from typing import NamedTuple
 
 
@@ -57,7 +59,7 @@ def parse_res(x: str) -> (int or str, str):
 
 
 def parse_list(arg_string: str) -> list:
-    return list(map(lambda x: x.strip() if type(x) == str else x,map(try_int, arg_string.split(','))))
+    return list(map(lambda x: x.strip() if type(x) == str else x,map(try_int, re.split(r',\s*(?![^{}]*\))',arg_string))))
 
 
 def parse_line(strace_line: str) -> SysCall or None:

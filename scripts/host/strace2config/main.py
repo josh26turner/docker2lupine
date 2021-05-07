@@ -3,8 +3,8 @@ import fnmatch
 
 from collections.abc import Iterable
 
-from strace2config.parser import parse_files, get_files, get_syscall_names
-from strace2config.load_options import get_options, get_all_options, Config
+from parser import parse_files, get_files, get_syscall_names
+from load_options import get_options, get_all_options, Config
 
 
 def check_file_opt(opt: Config, file: str) -> bool:
@@ -70,3 +70,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     init, kernel = get_min_config(args.strace_files)
+    print(init, kernel)

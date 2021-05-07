@@ -1,0 +1,9 @@
+catalyst:
+  sys_args:
+  - call: bind
+    arg_pos: 1
+    arg_vals:
+    - sin_addr=inet_addr("127.0.0.1")
+product:
+  init:
+  - LOOPBACK_DEV

@@ -33,9 +33,12 @@
 int main(int argc, char *argv[])
 {
     int strace = argc >= 2 && strcmp("strace", argv[1]) == 0;
-    puts("Network setup");
+
+    #ifdef LOOPBACK_DEV
+    puts("Loopback setup");
     system("/busybox-x86_64 ip addr add 127.0.0.1/24 dev lo");
     system("/busybox-x86_64 ip link set lo up");
+    #endif
 
     #ifdef ENTROPY_GEN
     puts("Generating entropy");
