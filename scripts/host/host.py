@@ -73,12 +73,12 @@ if __name__ == "__main__":
     if args.strace:
         print('Run tests or perform a regular usage of the service...')
 
-    while os.system('pgrep firecracker > /dev/null'):
-        pass
-    
     input('Press enter when finished')
     lupine_server.set_done(True)
     lupine_server.wait_for_finish()
+
+    while not os.system('pgrep -x firecracker > /dev/null'):
+        pass
 
     extract_strace(args.lupine)
 
