@@ -3,8 +3,8 @@ import fnmatch
 
 from collections.abc import Iterable
 
-from parser import parse_files, get_files, get_syscall_names
-from load_options import get_options, get_all_options, Config
+from strace2config.parser import parse_files, get_files, get_syscall_names
+from strace2config.load_options import get_options, get_all_options, Config
 
 
 def check_file_opt(opt: Config, file: str) -> bool:
