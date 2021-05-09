@@ -1,29 +1,21 @@
-#!/bin/sh
-
-set -eu
+#!/bin/bash -e
 
 TAP_DEV="tap100"
 
-# set up the kernel boot args
-MASK_LONG="255.255.255.0"
-MASK_SHORT="/24"
-FC_IP="192.168.100.2"
-TAP_IP="192.168.100.1"
-FC_MAC="02:FC:00:00:00:05"
-
-KERNEL_BOOT_ARGS="ro console=ttyS0 noapic reboot=k panic=1 pci=off nomodules init=$2"
-KERNEL_BOOT_ARGS="${KERNEL_BOOT_ARGS} ip=${FC_IP}::${TAP_IP}:${MASK_LONG}::eth0:off"
+GUEST_IP="192.168.100.2"
+HOST_IP="192.168.100.1"
+GUEST_MAC="02:FC:00:00:00:05"
 
 ip link del "$TAP_DEV" 2> /dev/null || true
 ip tuntap add dev "$TAP_DEV" mode tap
-ip addr add "${TAP_IP}${MASK_SHORT}" dev "$TAP_DEV"
+ip addr add "$HOST_IP/24" dev "$TAP_DEV"
 ip link set dev "$TAP_DEV" up
 
 cat <<EOF > /tmp/vmconfig.json
 {
   "boot-source": {
     "kernel_image_path": "kernelbuild/$1",
-    "boot_args": "$KERNEL_BOOT_ARGS"
+    "boot_args": "console=ttyS0 noapic reboot=k panic=1 pci=off ipv6.disable=1 nomodules ip=$GUEST_IP::$HOST_IP:255.255.255.0:$1:eth0:off init=$2"
   },
   "drives": [
     {
@@ -36,12 +28,12 @@ cat <<EOF > /tmp/vmconfig.json
   "network-interfaces": [
       {
           "iface_id": "eth0",
-          "guest_mac": "$FC_MAC",
+          "guest_mac": "$GUEST_MAC",
           "host_dev_name": "$TAP_DEV"
       }
   ],
   "machine-config": {
-    "vcpu_count": 2,
+    "vcpu_count": 1,
     "mem_size_mib": 1024,
     "ht_enabled": false
   }

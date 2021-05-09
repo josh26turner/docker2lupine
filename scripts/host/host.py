@@ -10,6 +10,7 @@ MANIFEST_OUT = 'manifestout/'
 FIRECRACKER_OUT='firecrackerout/'
 HOST_DIR=os.path.dirname(os.path.abspath(__file__))
 
+
 def update_config(lupine: str) -> None:
     print('Parsing strace files')
     init, kernel = get_min_config(list(map(lambda file: STRACE_OUT + file, filter(lambda file: fnmatch.fnmatch(file, lupine + '.*'), os.listdir(STRACE_OUT)))))
@@ -39,7 +40,6 @@ if __name__ == "__main__":
     parser.add_argument('--ip', '-a', default=DEFAULT_IP)
     parser.add_argument('--port','-p', default=DEFAULT_PORT)
     parser.add_argument('--strace', '-s', action='store_true', help='debug to build minimal manifest')
-    parser.add_argument('--no_net', '-n', action='store_true', help='don\'t start a server or setup guest networking')
 
     args = parser.parse_args()
 
@@ -52,20 +52,6 @@ if __name__ == "__main__":
         out=FIRECRACKER_OUT,
         init='/init strace' if args.strace else '/init',
         host_dir=HOST_DIR))
-
-    if args.no_net:
-        if args.strace:
-            with open('{out}{lupine}.log'.format(lupine=args.lupine, out=FIRECRACKER_OUT), 'r') as log_file:
-                while 'stopVMM()' not in log_file.read():
-                    time.sleep(1)
-            
-            os.system('sudo mount rootfsbuild/{lupine}.ext4 /mnt'.format(lupine=args.lupine))
-            os.system('cp /mnt/{lupine}* straceout'.format(lupine=args.lupine))
-            os.system('sudo umount /mnt')
-
-            update_config(args.lupine)
-
-        exit(0)
 
     lupine_server = LupineServer()
     lupine_server.start_server(ip_addr=args.ip, port=args.port)
@@ -80,7 +66,6 @@ if __name__ == "__main__":
     while not os.system('pgrep -x firecracker > /dev/null'):
         pass
 
-    extract_strace(args.lupine)
-
     if args.strace:
+        extract_strace(args.lupine)
         update_config(args.lupine)

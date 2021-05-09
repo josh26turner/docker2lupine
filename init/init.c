@@ -43,9 +43,6 @@ int main(int argc, char *argv[])
     #ifdef ENTROPY_GEN
     puts("Generating entropy");
     reseed();
-    reseed();
-    reseed();
-    reseed();
     #endif
 
     #ifdef PROC_FS

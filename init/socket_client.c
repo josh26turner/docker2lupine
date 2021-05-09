@@ -14,7 +14,6 @@
 #define SERVER_IP "192.168.100.1"
 
 #define GET "get"
-#define FINISH "finish"
 #define DONE "done"
 #define STOP "stop"
 

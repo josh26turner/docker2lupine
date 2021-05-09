@@ -44,18 +44,21 @@ void reseed(void)
     int fd = open("/dev/urandom", O_RDWR);
     if (fd < 0) exit_perror("Unable to open /dev/urandom");
 
-    // Add the entropy bytes supplied by the hwrng
-    unsigned int num_buf[2];
-    int pos = 0;
-    while (pos <= len - 2)
+    for (int i = 0; i < 4; i ++)
     {
-        __builtin_ia32_rdrand64_step((unsigned long long*)&num_buf);
+        // Add the entropy bytes supplied by the hwrng
+        unsigned int num_buf[2];
+        int pos = 0;
+        while (pos <= len - 2)
+        {
+            __builtin_ia32_rdrand64_step((unsigned long long*)&num_buf);
 
-        info->buf[pos] = num_buf[1];
-        info->buf[pos+1] = num_buf[0];
+            info->buf[pos] = num_buf[1];
+            info->buf[pos+1] = num_buf[0];
 
-        pos += 2;
+            pos += 2;
+        }
+
+        if (ioctl(fd, RNDADDENTROPY, info) < 0) exit_perror("Error issuing RNDADDENTROPY operation");
     }
-
-    if (ioctl(fd, RNDADDENTROPY, info) < 0) exit_perror("Error issuing RNDADDENTROPY operation");
 }
