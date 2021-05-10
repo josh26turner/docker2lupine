@@ -6,10 +6,16 @@ GUEST_IP="192.168.100.2"
 HOST_IP="192.168.100.1"
 GUEST_MAC="02:FC:00:00:00:05"
 
-ip link del "$TAP_DEV" 2> /dev/null || true
-ip tuntap add dev "$TAP_DEV" mode tap
-ip addr add "$HOST_IP/24" dev "$TAP_DEV"
-ip link set dev "$TAP_DEV" up
+ip link del $TAP_DEV 2> /dev/null || true
+ip tuntap add dev $TAP_DEV mode tap
+ip addr add $HOST_IP/24 dev $TAP_DEV
+ip link set dev $TAP_DEV up
+
+{
+  iptables -t nat -A POSTROUTING -o `route | grep default | sed 's/  */ /g' | cut -d' ' -f 8` -j MASQUERADE
+  iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+  iptables -A FORWARD -i tap100 -o `route | grep default | sed 's/  */ /g' | cut -d' ' -f 8` -j ACCEPT
+} &
 
 cat <<EOF > /tmp/vmconfig.json
 {
@@ -27,9 +33,9 @@ cat <<EOF > /tmp/vmconfig.json
   ],
   "network-interfaces": [
       {
-          "iface_id": "eth0",
-          "guest_mac": "$GUEST_MAC",
-          "host_dev_name": "$TAP_DEV"
+        "iface_id": "eth0",
+        "guest_mac": "$GUEST_MAC",
+        "host_dev_name": "$TAP_DEV"
       }
   ],
   "machine-config": {

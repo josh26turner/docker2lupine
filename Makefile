@@ -27,7 +27,8 @@ musl-kml: patch-musl
 	pushd musl && \
 	./configure --prefix=$(PWD)/musl/musl-kml && \
 	make install && \
-	popd
+	popd && \
+	make -C linux ARCH=x86 INSTALL_HDR_PATH=../musl/musl-kml/ headers_install
 
 build-linux:
 	docker run -it -v "$(PWD)/linux":/linux-volume --rm linuxbuild:latest	\

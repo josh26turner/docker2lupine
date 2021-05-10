@@ -3,3 +3,4 @@ RUN apt-get update
 RUN apt-get -y install build-essential bc
 RUN apt-get -y install libssl-dev
 RUN apt-get -y install openssl
+USER 1000:1000
