@@ -55,7 +55,6 @@ def build_linux(linux_config: LinuxConf, app_name: str) -> None:
 
 
 def build_init(init_options: Runtime, app_name: str) -> None:
-    open('./init/env.h', 'w+').close()
     with open('./init/env.h', 'w+') as env_file:
         env_file.write('#define ENV_ARR ')
         for env in init_options.envs:

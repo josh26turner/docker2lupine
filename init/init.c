@@ -3,8 +3,6 @@
 #include <sys/mount.h>
 #include <string.h>
 #include <unistd.h>
-#include <signal.h>
-#include <dirent.h>
 #include <sys/reboot.h>
 
 #include "socket_client.h"

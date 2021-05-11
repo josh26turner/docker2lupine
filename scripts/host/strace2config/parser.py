@@ -113,4 +113,4 @@ def get_files(syscalls: list[SysCall]) -> list[str]:
 
 
 def get_syscall_names(syscalls: list[SysCall]) -> list[str]:
-    return sorted(set(map(lambda x: x.name, syscalls)))
+    return sorted(set(map(lambda x: x.name, filter(lambda x: x.res != -1, syscalls))))

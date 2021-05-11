@@ -4,33 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
+#include <linux/random.h>
 
 #include "reseed.h"
-
-/* Clear the entropy pool and associated counters.  (Superuser only.) */
-#define RNDCLEARPOOL	_IO( 'R', 0x06 )
-
-/* 
- * Write bytes into the entropy pool and add to the entropy count.
- * (Superuser only.)
- */
-#define RNDADDENTROPY	_IOW( 'R', 0x03, int [2] )
-
-/* Get the entropy count. */
-#define RNDGETENTCNT	_IOR( 'R', 0x00, int )
-
-void exit_perror(const char *msg)
-{
-    perror(msg);
-    exit(EXIT_FAILURE);
-}
-
-struct rand_pool_info
-{
-    int	entropy_count;
-	int	buf_size;
-	unsigned int buf[0];
-};
 
 void reseed(void)
 {
@@ -42,12 +18,15 @@ void reseed(void)
     info->entropy_count = len * sizeof(unsigned int) * 8;
 
     int fd = open("/dev/urandom", O_RDWR);
-    if (fd < 0) exit_perror("Unable to open /dev/urandom");
+    if (fd < 0)
+    {
+        puts("Could not open /dev/urandom");
+        return;
+    }
 
     for (int i = 0; i < 4; i ++)
     {
-        // Add the entropy bytes supplied by the hwrng
-        unsigned int num_buf[2];
+        __u32 num_buf[2];
         int pos = 0;
         while (pos <= len - 2)
         {
@@ -59,6 +38,10 @@ void reseed(void)
             pos += 2;
         }
 
-        if (ioctl(fd, RNDADDENTROPY, info) < 0) exit_perror("Error issuing RNDADDENTROPY operation");
+        if (ioctl(fd, RNDADDENTROPY, info) < 0)
+        {
+            puts("Could not add entropy to /dev/urandom");
+            return;
+        }
     }
 }
