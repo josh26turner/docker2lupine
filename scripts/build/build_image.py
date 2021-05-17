@@ -98,7 +98,6 @@ def build_fs(fs_path: str, app_name: str) -> None:
             ['/dev/tty',    '666', 'c 5 0'],
             ['/dev/random', '444', 'c 1 8'],
             ['/dev/urandom','444', 'c 1 9'],
-            ['/dev/null',   '660', 'c 1 3'],
         ]
         for node in nodes:
             os.system('sudo mknod -m {mode} {fs}{pathname} {dev}'.format(

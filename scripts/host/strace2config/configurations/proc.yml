@@ -2,9 +2,6 @@ catalyst:
   files:
   - /proc/*
   - /dev/fd/*
-  syscalls:
-  - rt_sigprocmask
-  - sigprocmask
 product:
   init:
   - PROC_FS

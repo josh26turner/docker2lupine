@@ -35,3 +35,9 @@ mariadb             yobasystems/alpine-mariadb:latest^
 neo4j               neo4j:3.5.5^
 orientdb            orientdb:3.0-tp3-alpine
 postgresql          postgres:alpine
+adminer             woahbase/alpine-adminer:latest*
+solr                solr:7.6.0-alpine^
+consul              smebberson/alpine-consul:latest*^
+tomcat              woahbase/alpine-tomcat:latest*
+couchdb             lsmoura/couchdb-alpine:latest
+cassandra           albertc/alpine-cassandra:latest^

@@ -4,4 +4,4 @@ catalyst:
   - signalfd4
 product:
   kernel:
-  - CONFIG_EVENTFD
+  - CONFIG_SIGNALFD
