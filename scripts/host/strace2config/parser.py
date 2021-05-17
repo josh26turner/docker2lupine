@@ -109,7 +109,7 @@ def parse_files(strace_file_names: list[str]) -> list[SysCall]:
 
 
 def get_files(syscalls: list[SysCall]) -> list[str]:
-    return sorted(set(map(lambda x: x.args[0].replace('\"', ''), filter(lambda x: x.name == 'open' and x.res != -1, syscalls))))
+    return sorted(set(map(lambda x: x.args[0].replace('\"', '') if x.name == 'open' else x.args[1].replace('\"', ''), filter(lambda x: (x.name == 'open' or x.name == 'openat') and x.res != -1, syscalls))))
 
 
 def get_syscall_names(syscalls: list[SysCall]) -> list[str]:

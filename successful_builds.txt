@@ -20,7 +20,6 @@ telegraf            telegraf:alpine
 jenkins             jenkins/jenkins:alpine
 chronograf          chronograf:alpine
 plone               plone:alpine
-spring              openjdk:8-jdk-alpine*
 mongo               mvertes/alpine-mongo:latest*
 elasticsearch       blacktop/elasticsearch:latest^
 wordpress           wordpress:fpm-alpine
@@ -41,3 +40,6 @@ consul              smebberson/alpine-consul:latest*^
 tomcat              woahbase/alpine-tomcat:latest*
 couchdb             lsmoura/couchdb-alpine:latest
 cassandra           albertc/alpine-cassandra:latest^
+zookeeper           bitname/zookeeper:latest
+rethinkdb           vanuan/rethinkdb-alpine:latest
+redmine             redmine:alpine
