@@ -23,11 +23,11 @@ def build_linux(linux_config: LinuxConf, app_name: str) -> None:
     if (linux_config.kml):
         print('Patching linux')
         os.system('make patch-linux 2>/dev/null >/dev/null')
-        base_file_path = './configs/lupine-djw-kml.config'
+        base_file_path = './configs/docker2lupine.config'
     else:
         print('Unpatching linux')
         os.system('make unpatch-linux 2>/dev/null >/dev/null')
-        base_file_path = './configs/lupine-djw-nokml.config'
+        base_file_path = './configs/docker2lupine-nokml.config'
 
     print('Loading config')
 
