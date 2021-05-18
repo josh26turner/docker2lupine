@@ -55,6 +55,10 @@ def build_manifest(docker_obj, skip_fs_dump, kml, output, envs, cmd, init) -> Ma
     manifest.linux_configuration.options, manifest.runtime.enabled_init_options = get_linux_options()
     if init is not None:
         manifest.runtime.enabled_init_options = init
+
+    if manifest.runtime.enabled_init_options[0] == '/init':
+        print("Entry command cannot use /init", file=sys.stderr)
+        exit(1)
     
     manifest.linux_configuration.kml = kml
 
