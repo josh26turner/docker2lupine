@@ -3,6 +3,5 @@
 
 int setup(void);
 int get_rsp(int);
-void done(int);
 
 #endif

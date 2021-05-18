@@ -13,7 +13,6 @@
 #define DEFAULT_SERVER_IP "192.168.100.1"
 
 #define GET "get"
-#define DONE "done"
 #define STOP "stop"
 
 #define MAX_MSG_LEN 10
