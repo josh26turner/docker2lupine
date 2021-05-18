@@ -5,10 +5,10 @@ name = "pypi"
 
 [packages]
 pyyaml = "*"
-requests = "*"
 
 [dev-packages]
 mariadb = "*"
+requests = "*"
 
 [requires]
 python_version = "3.9"

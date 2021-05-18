@@ -4,6 +4,7 @@ import os
 import sys
 
 from manifest import Manifest, Runtime, LinuxConf
+from strace2config.load_options import get_all_options
 
 manifest_out = 'manifestout/'
 
@@ -14,18 +15,8 @@ def inspect_docker_image(docker_image):
     return json.loads(docker_json)[0]
 
 
-def import_module_by_path(path):
-    name = os.path.splitext(os.path.basename(path))[0]
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(name, path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
 def get_linux_options():
-    load_options = import_module_by_path('scripts/host/strace2config/load_options.py')
-    options = load_options.get_all_options()
+    options = get_all_options()
     linux_conf = []
     init_conf = []
     
