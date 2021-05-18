@@ -39,7 +39,7 @@ echo -n "docker," >> $LOG_FILE
 run_docker
 
 echo "Building lupine"
-python $SCRIPT_DIR/build/build_manifest.py $DOCKER_IM $DOCKER_TAG --output $APP --init ENTROPY_GEN PROC_FS SYS_FS TMP_FS > /dev/null 2>&1
+python $SCRIPT_DIR/build/build_manifest.py $DOCKER_IM $DOCKER_TAG --output $APP > /dev/null 2>&1
 python $SCRIPT_DIR/build/build_image.py manifestout/$APP.json > /dev/null 2>&1
 
 echo "Benching unoptimised lupine"

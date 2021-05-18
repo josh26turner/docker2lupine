@@ -53,6 +53,9 @@ if __name__ == "__main__":
         init='/init strace' if args.strace else '/init',
         host_dir=HOST_DIR))
 
+    while os.system('ip addr show tap100 > /dev/null 2>&1') != 0:
+        pass
+
     lupine_server = LupineServer()
     lupine_server.start_server(ip_addr=args.ip, port=args.port)
 

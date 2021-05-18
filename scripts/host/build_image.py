@@ -131,14 +131,13 @@ if __name__ == '__main__':
     parser = ArgumentParser(epilog='Run from the Lupine root directory')
 
     parser.add_argument('manifest')
-    parser.add_argument('--name')
     parser.add_argument('--kernel', action='store_true', help='build the kernel')
     parser.add_argument('--filesystem', action='store_true', help='create the filesystem')
 
     args = parser.parse_args()
     build_all = not (args.kernel or args.filesystem)
 
-    name = args.name or os.path.splitext(os.path.split(args.manifest)[-1])[0]
+    name = os.path.splitext(os.path.split(args.manifest)[-1])[0]
 
     data = read_manifest(args.manifest)
 
