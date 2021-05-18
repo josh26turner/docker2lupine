@@ -41,13 +41,14 @@ def build_linux(linux_config: LinuxConf, app_name: str) -> None:
         for opt in linux_config.options:
             linux_conf_file.write(opt + '=y\n')
 
-    print('Building kernel')
-
-    os.system('yes no | make -C ' + linux_dir + ' oldconfig')
+    print('Building config')
+    os.system('yes no | make -C ' + linux_dir + ' oldconfig > /dev/null 2>&1')
 
     if os.system('docker images | grep \'linuxbuild *latest\' > /dev/null'): #Returns 1 if docker image does not exist
-        os.system('make build-env-image')
+        print('Building docker build environment, this will take some time')
+        os.system('make build-env-image > /dev/null')
 
+    print('Building kernel')
     os.system('make build-linux')
     copyfile(linux_dir + 'vmlinux', build_dir + app_name)
 
