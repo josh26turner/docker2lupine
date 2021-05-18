@@ -131,3 +131,15 @@ This will build a specialised manifest that can be used to rebuild the image, fo
 ```shell
 $ python scripts/host/build_image.py manifestout/nginx.json
 ```
+
+## Benchmarking
+
+Run `make docker-bench` to build the benchmark Docker images.
+
+There is a series of scripts in `scripts/benchmark` that will measure the performance of the Lupine unikernels compared to Docker.
+
+```sh
+$ scripts/benchmark/performance/node.sh
+```
+
+Will measure performance of a Node.js application.
