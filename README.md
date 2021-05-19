@@ -33,7 +33,7 @@ Running `scripts/host/build_manifest.py` will build a manifest from a given Dock
 ```shell
 $ python scripts/host/build_manifest.py --help 
 
-usage: build_manifest.py [-h] [--output OUTPUT] [--skip_fs_dump] [--no_kml] [--envs ENVS [ENVS ...]] [--cmd CMD] [--init INIT [INIT ...]] docker_image [docker_tag]
+usage: build_manifest.py [-h] [--output OUTPUT] [--skip_fs_dump] [--no_kml] [--envs ENVS [ENVS ...]] [--cmd CMD] docker_image [docker_tag]
 
 positional arguments:
   docker_image
